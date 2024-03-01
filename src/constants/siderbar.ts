@@ -66,4 +66,11 @@ export const sidebarNavItems: Link[] = [
     icon: Users,
     variant: 'ghost',
   },
+  {
+    title: 'Lovs',
+    href: ROUTES.LOV,
+    label: '',
+    icon: Users,
+    variant: 'ghost',
+  },
 ];

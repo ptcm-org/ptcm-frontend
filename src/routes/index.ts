@@ -18,6 +18,7 @@ const Environment = lazy(() => import('@/pages/Environment'));
 const BrightRoom = lazy(() => import('@/pages/BrightRoom'));
 const User = lazy(() => import('@/pages/User'));
 const UserManagement = lazy(() => import('@/pages/UserManagement'));
+const LOVSettingPage = lazy(() => import('@/pages/Settings/Lov/Pages/LovPage'));
 const PTCMLogin = lazy(() => import('@/pages/Auth/Pages/LoginPage'));
 
 export const ROUTER = createBrowserRouter([
@@ -60,6 +61,10 @@ export const ROUTER = createBrowserRouter([
       {
         path: ROUTES.USER_MANAGEMENT,
         Component: UserManagement,
+      },
+      {
+        path: ROUTES.LOV,
+        Component: LOVSettingPage,
       },
     ],
   },

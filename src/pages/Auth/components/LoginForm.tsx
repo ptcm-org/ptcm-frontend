@@ -8,18 +8,25 @@ import { Form, Button, Checkbox, Input } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { LoginDto } from '@/api/auth-proxies';
 import { usePtcmAuthStore } from '@/stores/ptcmAuthStore';
+import useAuthStore from '@/stores/authStore';
+import { saveToken, getToken } from '@/utils/cookie';
 
 export function LoginForm() {
   const login = usePtcmAuthStore(state => state.login)
   const isLoading = usePtcmAuthStore(state => state.isLoading)
   const error = usePtcmAuthStore(state => state.error)
   const isLoggedIn = usePtcmAuthStore(state => state.isLoggedIn);
+  const token = useAuthStore(state => state.token);
   const navigate = useNavigate();
   
 
   const onFinish = async (values: LoginDto) => {
     await login(values);
     if (isLoggedIn) {
+      // console.log('token is: ', token);
+      // saveToken(token ? token : '');
+      // const testCookie = getToken();
+      // console.log('token is: ', testCookie);
       navigate('/');
     }
   };

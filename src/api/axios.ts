@@ -3,6 +3,8 @@ import { getToken, removeToken } from '../utils/cookie';
 
 let isTokenExpiredAlertShown = false;
 
+//const userToken = useAuthStore(state => state.token);
+
 const AXIOS_INSTANCE = axios.create({
   baseURL: ``,
   withCredentials: true,
@@ -11,6 +13,7 @@ const AXIOS_INSTANCE = axios.create({
 AXIOS_INSTANCE.interceptors.request.use(
   config => {
     const token = getToken();
+    
     if (token && token.length) {
       config.headers['Authorization'] = `Bearer ${token}`;
     }
