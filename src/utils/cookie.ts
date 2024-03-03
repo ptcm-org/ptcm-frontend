@@ -10,5 +10,5 @@ export function removeToken(): void {
   cookie.remove('connect.sid');
 }
 export function saveToken(token: string): void {
-  cookie.set('access_token', token);
+  cookie.set('access_token', token, { path: '/' });
 }

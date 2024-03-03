@@ -1,4 +1,15 @@
-import { AlertCircle, Archive, ArchiveX, File, LampCeiling, LucideIcon, PenBox, Send, Users } from 'lucide-react';
+import {
+  AlertCircle,
+  Archive,
+  ArchiveX,
+  BookMinus,
+  File,
+  LampCeiling,
+  LucideIcon,
+  PenBox,
+  Send,
+  Users,
+} from 'lucide-react';
 import { ROUTES } from '.';
 
 type Link = {
@@ -64,6 +75,20 @@ export const sidebarNavItems: Link[] = [
     href: ROUTES.USER_MANAGEMENT,
     label: '',
     icon: Users,
+    variant: 'ghost',
+  },
+  {
+    title: 'Lovs',
+    href: ROUTES.LOV,
+    label: '',
+    icon: Users,
+    variant: 'ghost',
+  },
+  {
+    title: 'Danh Mục',
+    href: ROUTES.CATEGORY,
+    label: '',
+    icon: BookMinus,
     variant: 'ghost',
   },
 ];

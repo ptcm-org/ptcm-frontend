@@ -9,4 +9,7 @@ export const ROUTES = {
   BRIGHT_ROOM: '/bright-room',
   USER: '/user',
   USER_MANAGEMENT: '/user-management',
+  PTCM_LOGIN: 'auth/login',
+  LOV: 'settings/lov',
+  CATEGORY: '/category',
 };

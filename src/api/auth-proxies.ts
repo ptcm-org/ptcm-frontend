@@ -470,11 +470,11 @@ export interface InitiateCultureDto {
 }
 
 export interface CreateEnvironmentIngredientDto {
-  barCode: string;
-  ingredientCode: string;
-  ingredientDescription: string;
-  ingredientName: string;
-  ingredientUnit: string;
+  barCode?: string;
+  ingredientCode?: string;
+  ingredientDescription?: string;
+  ingredientName?: string;
+  ingredientUnit?: string;
   status: string;
 }
 
