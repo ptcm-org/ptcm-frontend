@@ -10,5 +10,6 @@ export const ROUTES = {
   USER: '/user',
   USER_MANAGEMENT: '/user-management',
   PTCM_LOGIN: 'auth/login',
-  LOV: 'settings/lov'
+  LOV: 'settings/lov',
+  CATEGORY: '/category',
 };
