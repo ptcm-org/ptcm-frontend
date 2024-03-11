@@ -25,21 +25,20 @@ interface Invoice {
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
   bioSelect:
-  | {
-      key: string;
-      label: string;
-    }[]
-  | undefined;
-shelvesSelect:
-  | {
-      key: string;
-      label: string;
-    }[]
-  | undefined;
+    | {
+        key: string;
+        label: string;
+      }[]
+    | undefined;
+  shelvesSelect:
+    | {
+        key: string;
+        label: string;
+      }[]
+    | undefined;
 }
 
-export function DataTableRowActions<TData>({ row ,bioSelect
-  shelvesSelect}: DataTableRowActionsProps<TData>) {
+export function DataTableRowActions<TData>({ row, bioSelect, shelvesSelect }: DataTableRowActionsProps<TData>) {
   // const { toast } = useToast();
   // const { mutate } = useSWRConfig();
   const [openTable, setOpenTable] = useState(false);
