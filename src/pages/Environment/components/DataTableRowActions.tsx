@@ -1,6 +1,8 @@
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import { useState } from 'react';
 import { Row } from '@tanstack/react-table';
+import { useToast } from '@/components/ui/use-toast';
+import { useSWRConfig } from 'swr';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -11,6 +13,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import DrawerEnvironmentTable from './DrawerEnvironmentTable';
 import { DialogEnvironmentForm } from './DialogEnvironmentForm';
+// import { changingCultureMediumControllerUpdateChangingCultureMedium } from '@/api/auth-proxies';
 
 interface Invoice {
   invoice: string;
@@ -21,9 +24,24 @@ interface Invoice {
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
+  bioSelect:
+  | {
+      key: string;
+      label: string;
+    }[]
+  | undefined;
+shelvesSelect:
+  | {
+      key: string;
+      label: string;
+    }[]
+  | undefined;
 }
 
-export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TData>) {
+export function DataTableRowActions<TData>({ row ,bioSelect
+  shelvesSelect}: DataTableRowActionsProps<TData>) {
+  // const { toast } = useToast();
+  // const { mutate } = useSWRConfig();
   const [openTable, setOpenTable] = useState(false);
   const [openForm, setOpenForm] = useState(false);
 
@@ -40,6 +58,20 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
     setOpenTable(true);
     setOpenForm(false);
   };
+  const onDelete = async () => {
+    // const response =
+    //   (await row) &&
+    //   changingCultureMediumControllerUpdateChangingCultureMedium({
+    //     id: (row.original as { id: string }).id,
+    //     changingCultureMedium: { status: 'InActive' },
+    //   });
+    // if (response.statusCode === 200) {
+    //   toast({
+    //     title: 'Tạo nguyên liệu thành công',
+    //   });
+    //   await mutate('/api/changingculturemedium');
+    // }
+  };
 
   return (
     <>
@@ -52,11 +84,18 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-[160px]">
           <DropdownMenuItem onClick={openDialogForm}>Edit</DropdownMenuItem>
+          <DropdownMenuItem onClick={onDelete}>Delete</DropdownMenuItem>
           <DropdownMenuItem onClick={openDialogTable}>Show table</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
       <DrawerEnvironmentTable invoices={invoices} open={openTable} setOpen={setOpenTable} />
-      <DialogEnvironmentForm open={openForm} setOpen={setOpenForm} />
+      <DialogEnvironmentForm
+        open={openForm}
+        setOpen={setOpenForm}
+        row={row}
+        bioSelect={bioSelect}
+        shelvesSelect={shelvesSelect}
+      />
     </>
   );
 }

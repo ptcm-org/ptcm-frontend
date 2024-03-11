@@ -8,7 +8,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { DataTable } from '@/components/Table/DataTable';
 import { DataTableColumnHeader } from '@/components/Table/DataTableColumnHeader';
-import { multiFetcher } from '@/api/axios';
+import { getData } from '@/api/axios';
 import DialogIngredientForm from './components/DialogIngredientForm';
 import { DataTableIngredientRowActions } from './components/DataTableIngredientRowActions';
 import DialogEnvironmentForm from './components/DialogEnvironmentForm';
@@ -39,12 +39,9 @@ interface IngredientData extends CommonData {
 }
 
 type Response<T> = {
-  status: 'fulfilled';
-  value: {
-    statusCode: number;
-    message: string;
-    data: T[];
-  };
+  statusCode: number;
+  message: string;
+  data: T[];
 };
 
 type EnvironmentsResponse = Response<EnvironmentData>;
@@ -53,7 +50,17 @@ type IngredientsResponse = Response<IngredientData>;
 const Category = () => {
   const [isOpenIngredientDialog, setOpenIngredientDialog] = useState(false);
   const [isOpenEnvironmentDialog, setOpenEnvironmentDialog] = useState(false);
-  const { data, isLoading } = useSWR(['api/environment', 'api/environment/ingredients'], multiFetcher);
+  const {
+    data: environments,
+    isLoading: isLoadingEnvironments,
+    error,
+  } = useSWR<EnvironmentsResponse>('api/environment', getData);
+  const {
+    data: ingredients,
+    isLoading: isLoadingIngredients,
+    error: errorIngredients,
+  } = useSWR<IngredientsResponse>('api/environment/ingredients', getData);
+
   const openIngredientDialog = () => {
     setOpenIngredientDialog(true);
   };
@@ -275,12 +282,8 @@ const Category = () => {
     },
   ];
 
-  if (isLoading) return <div>loading...</div>;
-
-  const isError: boolean = data?.some((r) => r.status === 'rejected') || false;
-  if (isError) return <div>failed to load</div>;
-
-  const [environments, ingredients] = data as [EnvironmentsResponse, IngredientsResponse];
+  if (isLoadingEnvironments || isLoadingIngredients) return <div>loading...</div>;
+  if (error || errorIngredients) return <div>failed to load</div>;
   return (
     <>
       <div className="flex flex-col gap-2 space-y-6 p-4 pt-4">
@@ -300,11 +303,7 @@ const Category = () => {
             <CardTitle>Bảng môi trường</CardTitle>
           </CardHeader>
           <CardContent>
-            <DataTable
-              data={environments.value.data}
-              columns={columnsEnvironment}
-              fieldInputFilter={'environmentName'}
-            />
+            <DataTable data={environments?.data} columns={columnsEnvironment} fieldInputFilter={'environmentName'} />
           </CardContent>
         </Card>
         <Card className="pt-2">
@@ -312,7 +311,7 @@ const Category = () => {
             <CardTitle>Bảng nguyên liệu</CardTitle>
           </CardHeader>
           <CardContent>
-            <DataTable data={ingredients.value.data} columns={columnsIngredients} fieldInputFilter={'ingredientName'} />
+            <DataTable data={ingredients?.data} columns={columnsIngredients} fieldInputFilter={'ingredientName'} />
           </CardContent>
         </Card>
       </div>

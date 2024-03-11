@@ -8,7 +8,7 @@ import { DataTableFacetedFilter } from './DataTableFacetedFilter';
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
-  fieldInputFilter: string;
+  fieldInputFilter?: string;
   facetedFilters?: FacetedFilter[];
 }
 export interface FacetedFilter {
@@ -22,12 +22,14 @@ export function DataTableToolbar<TData>({ table, fieldInputFilter, facetedFilter
   return (
     <div className="flex items-center justify-between">
       <div className="flex flex-1 items-center space-x-2">
-        <Input
-          placeholder="Filter tasks..."
-          value={(table.getColumn(fieldInputFilter)?.getFilterValue() as string) ?? ''}
-          onChange={(event) => table.getColumn(fieldInputFilter)?.setFilterValue(event.target.value)}
-          className="h-8 w-[150px] lg:w-[250px]"
-        />
+        {fieldInputFilter && (
+          <Input
+            placeholder="Filter tasks..."
+            value={(table.getColumn(fieldInputFilter)?.getFilterValue() as string) ?? ''}
+            onChange={(event) => table.getColumn(fieldInputFilter)?.setFilterValue(event.target.value)}
+            className="h-8 w-[150px] lg:w-[250px]"
+          />
+        )}
         {facetedFilters?.map(
           (facetedFilter, index) =>
             table.getColumn(facetedFilter.field) && (
