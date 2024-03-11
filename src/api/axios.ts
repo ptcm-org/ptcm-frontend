@@ -1,4 +1,3 @@
-import { Cookies } from 'react-cookie';
 import axios, { AxiosRequestConfig } from 'axios';
 import { getToken, removeToken } from '../utils/cookie';
 

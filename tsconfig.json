@@ -22,7 +22,7 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
   },
   "include": ["src", "jest.config.js"],
   "references": [{ "path": "./tsconfig.node.json" }]

@@ -16,7 +16,8 @@ export function useLovHook<T extends LovKey>(
   getValue: LovValue<T>;
   getOptions: LovOption<T>;
 } {
-    const lovData = lovStore(state => state.lovData);
+  
+  const lovData = lovStore(state => state.lovData);
   const getValue = {} as LovValue<T>;
   const getOptions = {} as LovOption<T>;
 

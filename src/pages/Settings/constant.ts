@@ -6,6 +6,30 @@ export const LOV_CONFIG_LIST = [
       title: 'Phases',
     },
     {
+      key: 'batch',
+      title: 'Batch',
+    },
+    {
+      key: 'batchCode',
+      title: 'Batch Code',
+    },
+    {
+      key: 'block',
+      title: 'Block',
+    },
+    {
+      key: 'coustomer',
+      title: 'Coustomer',
+    },
+    {
+      key: 'tissueLineCode',
+      title: 'Tissue Line Code',
+    },
+    {
+      key: 'cellCulture',
+      title: 'Cell Culture Group',
+    },
+    {
         key: 'cleanRooms',
         title: 'Clean Rooms',
     },
@@ -32,10 +56,10 @@ export const LOV_CONFIG_LIST = [
   ] as const;
   
   export const GLOBAL_SETTING_CONFIG_LIST = [
-    {
-      key: 'national',
-      title: 'National',
-    },
+    // {
+    //   key: 'national',
+    //   title: 'National',
+    // },
     {
       key: 'language',
       title: 'Language',

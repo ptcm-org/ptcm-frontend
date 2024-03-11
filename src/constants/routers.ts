@@ -12,4 +12,10 @@ export const ROUTES = {
   PTCM_LOGIN: 'auth/login',
   LOV: 'settings/lov',
   CATEGORY: '/category',
+  GLOBALSETTING: 'settings/global',
+  ORDERS: '/orders',
+  CREATEORDER: '/orders/create',
+  SUBCULTURING: '/subculturings',
+  INITIATECULTURE: '/initiatecultures',
+  CULTURINGCELL: '/culturingcells',
 };

@@ -21,6 +21,13 @@ const UserManagement = lazy(() => import('@/pages/UserManagement'));
 const LOVSettingPage = lazy(() => import('@/pages/Settings/Lov/Pages/LovPage'));
 const CategoryPage = lazy(() => import('@/pages/Category'));
 const PTCMLogin = lazy(() => import('@/pages/Auth/Pages/LoginPage'));
+const GlobalSetting = lazy(() => import('@/pages/Settings/Global/Pages/GlobalSettingsPage'));
+const SettingPage = lazy(() => import('@/pages/Settings/Pages/SettingPage'));
+const OrderPages = lazy(() => import('@/pages/Orders/Pages/OrderPages'));
+const CreateOrder = lazy(() => import('@/pages/Orders/Pages/CreateOrder'));
+const SubCulturingPages = lazy(() => import('@/pages/SubCulturing/Pages/SubCulturingPages'));
+const InitiateCulturePages = lazy(() => import('@/pages/InitiateCulture/Pages/InitiateCulturePages'));
+const CulturingCellPages = lazy(() => import('@/pages/CulturingCell/Pages/CulturingCellPages'));
 
 export const ROUTER = createBrowserRouter([
   {
@@ -71,6 +78,43 @@ export const ROUTER = createBrowserRouter([
         path: ROUTES.CATEGORY,
         Component: CategoryPage,
       },
+      {
+        path: ROUTES.ORDERS,
+        Component: OrderPages,
+      },
+      {
+        path: ROUTES.CREATEORDER,
+        Component: CreateOrder,
+      },
+      {
+        path: ROUTES.SUBCULTURING,
+        Component: SubCulturingPages,
+      },
+      {
+        path: ROUTES.INITIATECULTURE,
+        Component: InitiateCulturePages,
+      },
+      {
+        path: ROUTES.CULTURINGCELL,
+        Component: CulturingCellPages,
+      },
+      {
+        path: 'settings',
+        children: [
+          {
+            index: true,
+            Component: SettingPage,
+          },
+          {
+            path: ROUTES.LOV,
+            Component: LOVSettingPage,
+          },
+          {
+            path: ROUTES.GLOBALSETTING,
+            Component: GlobalSetting,
+          },
+        ]
+      }
     ],
   },
   {
