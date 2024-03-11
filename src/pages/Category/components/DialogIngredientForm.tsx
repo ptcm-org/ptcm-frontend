@@ -1,7 +1,6 @@
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { Dispatch, SetStateAction } from 'react';
-import { mutate } from 'swr';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { Input } from '@/components/ui/input';
@@ -22,6 +21,7 @@ import {
   environmentControllerUpdateEnvironmentIngredient,
 } from '@/api/auth-proxies';
 import { useToast } from '@/components/ui/use-toast';
+import { useSWRConfig } from 'swr';
 
 type IngredientFormValues = z.infer<typeof ingredientFormSchema>;
 
@@ -63,6 +63,7 @@ const ingredientFormSchema = z.object({
 
 const DialogIngredientForm = ({ open, setOpen, row }: DialogIngredientFormProps) => {
   const { toast } = useToast();
+  const { mutate } = useSWRConfig();
 
   const unitSelect = [
     {

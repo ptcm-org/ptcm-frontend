@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import DialogIngredientForm from './DialogIngredientForm';
 import { useToast } from '@/components/ui/use-toast';
-import { mutate } from 'swr';
+import { useSWRConfig } from 'swr';
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
@@ -23,6 +23,7 @@ interface DataTableRowActionsProps<TData> {
 
 export function DataTableIngredientRowActions<TData>({ row }: DataTableRowActionsProps<TData>) {
   const { toast } = useToast();
+  const { mutate } = useSWRConfig();
   const [isOpenIngredientDialog, setOpenIngredientDialog] = useState(false);
   const openIngredientDialog = () => {
     setOpenIngredientDialog(true);

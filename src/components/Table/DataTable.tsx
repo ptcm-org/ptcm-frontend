@@ -20,8 +20,8 @@ import { DataTableToolbar, FacetedFilter } from './DataTableToolbar';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
-  data: TData[];
-  fieldInputFilter: string;
+  data?: TData[];
+  fieldInputFilter?: string;
   facetedFilters?: FacetedFilter[];
 }
 
@@ -37,7 +37,7 @@ export function DataTable<TData, TValue>({
   const [sorting, setSorting] = React.useState<SortingState>([]);
 
   const table = useReactTable({
-    data,
+    data: data || [],
     columns,
     state: {
       sorting,

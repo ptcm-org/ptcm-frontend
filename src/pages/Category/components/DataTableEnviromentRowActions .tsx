@@ -2,6 +2,7 @@ import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import { Row } from '@tanstack/react-table';
 import { useToast } from '@/components/ui/use-toast';
 import { useState } from 'react';
+import { useSWRConfig } from 'swr';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -10,7 +11,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { mutate } from 'swr';
 import DialogEnvironmentForm from './DialogEnvironmentForm';
 import { environmentControllerUpdateEnvironment } from '@/api/auth-proxies';
 
@@ -21,6 +21,7 @@ interface DataTableRowActionsProps<TData> {
 export function DataTableEnvironmentRowActions<TData>({ row }: DataTableRowActionsProps<TData>) {
   const { toast } = useToast();
   const [isOpenEnvironmentDialog, setOpenEnvironmentDialog] = useState(false);
+  const { mutate } = useSWRConfig();
   const openEnvironmentDialog = () => {
     setOpenEnvironmentDialog(true);
   };

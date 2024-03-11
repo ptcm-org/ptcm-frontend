@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { Dispatch, SetStateAction } from 'react';
-import { mutate } from 'swr';
+import { useSWRConfig } from 'swr';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useToast } from '@/components/ui/use-toast';
 
@@ -61,6 +61,7 @@ const ingredientFormSchema = z.object({
 
 const DialogEnvironmentForm = ({ open, setOpen, row }: DialogEnvironmentFormProps) => {
   const { toast } = useToast();
+  const { mutate } = useSWRConfig();
   const statusSelect = [
     {
       key: 'active',

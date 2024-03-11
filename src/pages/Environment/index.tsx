@@ -1,111 +1,101 @@
+import useSWR from 'swr';
 import { useState } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
+import { getData } from '@/api/axios';
 
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Checkbox } from '@/components/ui/checkbox';
-
 import { DialogEnvironmentForm } from './components/DialogEnvironmentForm';
 import { DataTableRowActions } from './components/DataTableRowActions';
-
-import { EnvironmentType } from './data/schema';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { DataTable } from '@/components/Table/DataTable';
 import { DataTableColumnHeader } from '@/components/Table/DataTableColumnHeader';
-import { Input } from '@/components/ui/input';
-import { SelectValue, SelectTrigger, SelectItem, SelectContent, Select } from '@/components/ui/select';
+import { convertArrayToObjectArray, generateFullName } from '@/helpers/convert';
+
+interface ChangingCultureMedium {
+  id: string;
+  changingCultureDate: string;
+  environmentalCode: string;
+  cellCultureCode: string;
+  boxId: string;
+  transactionType: string;
+  employeeId: string;
+  environmentalVolume: number;
+  childBags: number;
+  bagCode: string;
+  changingCultureMediumTime: number;
+  environmentRoomCode: string;
+  environmentShelveCode: string;
+  changingCultureMediumCode: string;
+  customerWeek: string;
+  bagBox: string;
+  note: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+type Response<T> = {
+  statusCode: number;
+  message: string;
+  data: T[];
+};
+
+interface Employee {
+  id: string;
+  employeeId: string;
+  jobTitleCd: string;
+  departmentId: string;
+  teamId: string;
+  directManagerId: string;
+  firstName: string;
+  middleName: string;
+  lastName: string;
+  nickName: string;
+  email: string;
+  status: string;
+  gender: string;
+  dob: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+type Shelf = {
+  id: string;
+  shelveName: string;
+  shelveDescription: string;
+  shelveLevels: number;
+  shelveCode: string;
+  shelveIndex: string;
+  status: 'Occupied';
+};
+
+type ChangingCultureMediumsResponse = Response<ChangingCultureMedium>;
+type BioemployeesResponse = Response<Employee>;
+type ShelvesResponse = Response<Shelf>;
 
 const Environment = () => {
   const [isAddTaskDialogOpen, setAddTaskDialogOpen] = useState(false);
 
-  const environments = [
-    {
-      id: 1,
-      formCode: 1,
-      phaseLabel: 'test',
-      date: '123',
-      weekKH: '1',
-      treeGroup: 'test',
-      box: '1',
-      importExport: 'test',
-      capacity: '1',
-      bagCode: 1,
-      tChild: '1',
-      bagBox: '1',
-      environmentRoom: 1,
-      environmentalShelves: 1,
-      nvPour: '1',
-      minute: '1',
-      staff: '1',
-      dateAdded: '1',
-      note: '1',
-    },
-    {
-      id: 2,
-      formCode: 2,
-      phaseLabel: 'production',
-      date: '456',
-      weekKH: '2',
-      treeGroup: 'production_group',
-      box: '2',
-      importExport: 'production_export',
-      capacity: '2',
-      bagCode: 2,
-      tChild: '2',
-      bagBox: '2',
-      environmentRoom: 2,
-      environmentalShelves: 2,
-      nvPour: '2',
-      minute: '2',
-      staff: '2',
-      dateAdded: '2',
-      note: '2',
-    },
-    {
-      id: 3,
-      formCode: 3,
-      phaseLabel: 'development',
-      date: '789',
-      weekKH: '3',
-      treeGroup: 'development_group',
-      box: '3',
-      importExport: 'development_export',
-      capacity: '3',
-      bagCode: 3,
-      tChild: '3',
-      bagBox: '3',
-      environmentRoom: 3,
-      environmentalShelves: 3,
-      nvPour: '3',
-      minute: '3',
-      staff: '3',
-      dateAdded: '3',
-      note: '3',
-    },
-    {
-      id: 4,
-      formCode: 4,
-      phaseLabel: 'maintenance',
-      date: '101112',
-      weekKH: '4',
-      treeGroup: 'maintenance_group',
-      box: '4',
-      importExport: 'maintenance_export',
-      capacity: '4',
-      bagCode: 4,
-      tChild: '4',
-      bagBox: '4',
-      environmentRoom: 4,
-      environmentalShelves: 4,
-      nvPour: '4',
-      minute: '4',
-      staff: '4',
-      dateAdded: '4',
-      note: '4',
-    },
-  ];
+  const {
+    data: changingculturemediums,
+    isLoading: changingculturemediumsLoading,
+    error: changingculturemediumsError,
+  } = useSWR<ChangingCultureMediumsResponse>('/api/changingculturemedium', getData);
+  const {
+    data: shelves,
+    isLoading: shelvesLoading,
+    error: shelvesError,
+  } = useSWR<ShelvesResponse>('/api/shelve', getData);
+  const {
+    data: bioemployees,
+    isLoading: bioemployeesLoading,
+    error: bioemployeesError,
+  } = useSWR<BioemployeesResponse>('/api/bioemployee', getData);
+  const bioSelect = convertArrayToObjectArray(bioemployees?.data, 'employeeId', undefined, generateFullName);
+  const shelvesSelect = convertArrayToObjectArray(shelves?.data, 'id', 'shelveName');
 
-  const columns: ColumnDef<EnvironmentType>[] = [
+  const columns: ColumnDef<ChangingCultureMedium>[] = [
     {
       id: 'select',
       header: ({ table }) => (
@@ -127,86 +117,86 @@ const Environment = () => {
       enableSorting: false,
       enableHiding: false,
     },
+    // {
+    //   accessorKey: 'id',
+    //   header: ({ column }) => <DataTableColumnHeader column={column} title="Task" />,
+    //   cell: ({ row }) => <div className="w-[80px]">{row.getValue('id')}</div>,
+    //   enableSorting: false,
+    //   enableHiding: false,
+    // },
     {
-      accessorKey: 'id',
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Task" />,
-      cell: ({ row }) => <div className="w-[80px]">{row.getValue('id')}</div>,
-      enableSorting: false,
-      enableHiding: false,
-    },
-    {
-      accessorKey: 'phaseLabel',
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Mã phiếu" />,
+      accessorKey: 'changingCultureMediumCode',
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Mã phiếu đổ môi trường - nhập vào" />,
       cell: ({ row }) => {
         return (
           <div className="flex space-x-2">
-            <span className="max-w-[500px] truncate font-medium">{row.getValue('phaseLabel')}</span>
+            <span className="max-w-[500px] truncate font-medium">{row.getValue('changingCultureMediumCode')}</span>
           </div>
         );
       },
     },
     {
-      accessorKey: 'date',
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Ngày" />,
+      accessorKey: 'changingCultureDate',
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Ngày đổ môi trường" />,
       cell: ({ row }) => {
         return (
           <div className="flex space-x-2">
-            <span className="max-w-[500px] truncate font-medium">{row.getValue('date')}</span>
+            <span className="max-w-[500px] truncate font-medium">{row.getValue('changingCultureDate')}</span>
           </div>
         );
       },
     },
     {
-      accessorKey: 'weekKH',
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Tuần KH" />,
+      accessorKey: 'customerWeek',
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Tuần Khách hàng" />,
       cell: ({ row }) => {
         return (
           <div className="flex space-x-2">
-            <span className="max-w-[500px] truncate font-medium">{row.getValue('weekKH')}</span>
+            <span className="max-w-[500px] truncate font-medium">{row.getValue('customerWeek')}</span>
           </div>
         );
       },
     },
     {
-      accessorKey: 'treeGroup',
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Nhóm cây" />,
+      accessorKey: 'environmentalCode',
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Mã môi trường" />,
       cell: ({ row }) => {
         return (
           <div className="flex space-x-2">
-            <span className="max-w-[500px] truncate font-medium">{row.getValue('treeGroup')}</span>
+            <span className="max-w-[500px] truncate font-medium">{row.getValue('environmentalCode')}</span>
           </div>
         );
       },
     },
     {
-      accessorKey: 'box',
+      accessorKey: 'boxId',
       header: ({ column }) => <DataTableColumnHeader column={column} title="Box" />,
       cell: ({ row }) => {
         return (
           <div className="flex space-x-2">
-            <span className="max-w-[500px] truncate font-medium">{row.getValue('box')}</span>
+            <span className="max-w-[500px] truncate font-medium">{row.getValue('boxId')}</span>
           </div>
         );
       },
     },
     {
-      accessorKey: 'importExport',
+      accessorKey: 'transactionType',
       header: ({ column }) => <DataTableColumnHeader column={column} title="Nhập xuất" />,
       cell: ({ row }) => {
         return (
           <div className="flex space-x-2">
-            <span className="max-w-[500px] truncate font-medium">{row.getValue('importExport')}</span>
+            <span className="max-w-[500px] truncate font-medium">{row.getValue('transactionType')}</span>
           </div>
         );
       },
     },
     {
-      accessorKey: 'capacity',
+      accessorKey: 'environmentalVolume',
       header: ({ column }) => <DataTableColumnHeader column={column} title="Dung tích (Lít)" />,
       cell: ({ row }) => {
         return (
           <div className="flex space-x-2">
-            <span className="max-w-[500px] truncate font-medium">{row.getValue('capacity')}</span>
+            <span className="max-w-[500px] truncate font-medium">{row.getValue('environmentalVolume')}</span>
           </div>
         );
       },
@@ -223,12 +213,12 @@ const Environment = () => {
       },
     },
     {
-      accessorKey: 'tChild',
-      header: ({ column }) => <DataTableColumnHeader column={column} title="T.Con" />,
+      accessorKey: 'childBags',
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Túi con" />,
       cell: ({ row }) => {
         return (
           <div className="flex space-x-2">
-            <span className="max-w-[500px] truncate font-medium">{row.getValue('tChild')}</span>
+            <span className="max-w-[500px] truncate font-medium">{row.getValue('childBags')}</span>
           </div>
         );
       },
@@ -245,71 +235,75 @@ const Environment = () => {
       },
     },
     {
-      accessorKey: 'environmentRoom',
+      accessorKey: 'environmentRoomCode',
       header: ({ column }) => <DataTableColumnHeader column={column} title="Phòng MT" />,
       cell: ({ row }) => {
         return (
           <div className="flex space-x-2">
-            <span className="max-w-[500px] truncate font-medium">{row.getValue('environmentRoom')}</span>
+            <span className="max-w-[500px] truncate font-medium">{row.getValue('environmentRoomCode')}</span>
           </div>
         );
       },
     },
     {
-      accessorKey: 'environmentalShelves',
+      accessorKey: 'environmentShelveCode',
       header: ({ column }) => <DataTableColumnHeader column={column} title="Kệ MT" />,
       cell: ({ row }) => {
         return (
           <div className="flex space-x-2">
-            <span className="max-w-[500px] truncate font-medium">{row.getValue('environmentalShelves')}</span>
+            <span className="max-w-[500px] truncate font-medium">
+              {shelvesSelect?.find((shelve) => shelve.key === row.getValue('environmentShelveCode'))?.label}
+            </span>
           </div>
         );
       },
     },
     {
-      accessorKey: 'nvPour',
-      header: ({ column }) => <DataTableColumnHeader column={column} title="NV Đổ" />,
+      accessorKey: 'employeeId',
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Nhân viên đổ" />,
       cell: ({ row }) => {
         return (
           <div className="flex space-x-2">
-            <span className="max-w-[500px] truncate font-medium">{row.getValue('nvPour')}</span>
+            <span className="max-w-[500px] truncate font-medium">
+              {bioSelect?.find((bio) => bio.key === row.getValue('employeeId'))?.label}
+            </span>
           </div>
         );
       },
     },
     {
-      accessorKey: 'minute',
+      accessorKey: 'changingCultureMediumTime',
       header: ({ column }) => <DataTableColumnHeader column={column} title="Thời gian (Phút)" />,
       cell: ({ row }) => {
         return (
           <div className="flex space-x-2">
-            <span className="max-w-[500px] truncate font-medium">{row.getValue('minute')}</span>
+            <span className="max-w-[500px] truncate font-medium">{row.getValue('changingCultureMediumTime')}</span>
           </div>
         );
       },
     },
-    {
-      accessorKey: 'staff',
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Nhân viên" />,
-      cell: ({ row }) => {
-        return (
-          <div className="flex space-x-2">
-            <span className="max-w-[500px] truncate font-medium">{row.getValue('staff')}</span>
-          </div>
-        );
-      },
-    },
-    {
-      accessorKey: 'dateAdded',
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Ngày nhập" />,
-      cell: ({ row }) => {
-        return (
-          <div className="flex space-x-2">
-            <span className="max-w-[500px] truncate font-medium">{row.getValue('dateAdded')}</span>
-          </div>
-        );
-      },
-    },
+    // {
+    //   accessorKey: 'staff',
+    //   header: ({ column }) => <DataTableColumnHeader column={column} title="Nhân viên" />,
+    //   cell: ({ row }) => {
+    //     return (
+    //       <div className="flex space-x-2">
+    //         <span className="max-w-[500px] truncate font-medium">{row.getValue('staff')}</span>
+    //       </div>
+    //     );
+    //   },
+    // },
+    // {
+    //   accessorKey: 'dateAdded',
+    //   header: ({ column }) => <DataTableColumnHeader column={column} title="Ngày nhập" />,
+    //   cell: ({ row }) => {
+    //     return (
+    //       <div className="flex space-x-2">
+    //         <span className="max-w-[500px] truncate font-medium">{row.getValue('dateAdded')}</span>
+    //       </div>
+    //     );
+    //   },
+    // },
     {
       accessorKey: 'note',
       header: ({ column }) => <DataTableColumnHeader column={column} title="Ghi chú" />,
@@ -324,7 +318,7 @@ const Environment = () => {
 
     {
       id: 'actions',
-      cell: ({ row }) => <DataTableRowActions row={row} />,
+      cell: ({ row }) => <DataTableRowActions row={row} bioSelect={bioSelect} shelvesSelect={shelvesSelect} />,
     },
   ];
 
@@ -332,6 +326,8 @@ const Environment = () => {
     setAddTaskDialogOpen(true);
   };
 
+  if (changingculturemediumsLoading && shelvesLoading && bioemployeesLoading) return <div>loading...</div>;
+  if (changingculturemediumsError && bioemployeesError && shelvesError) return <div>failed to load</div>;
   return (
     <>
       <div className="flex flex-col gap-2 space-y-6 p-4 pt-4">
@@ -343,162 +339,22 @@ const Environment = () => {
           <Button onClick={openAddTaskDialog}>Add</Button>
         </div>
         <Separator />
-        <Card>
+        <Card className="">
           <CardHeader>
-            <CardTitle></CardTitle>
+            <CardTitle>Bảng Môi Trường</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="mx-auto my-6 rounded-md bg-white p-6 shadow">
-              <form>
-                <div className="grid grid-cols-4 gap-4">
-                  <div className="flex flex-col">
-                    <label className="mb-2 font-medium" htmlFor="date">
-                      Ngày
-                    </label>
-                    <Input id="date" placeholder="dd/mm/yyyy" type="text" />
-                  </div>
-                  <div className="flex flex-col">
-                    <label className="mb-2 font-medium" htmlFor="nhanPha">
-                      Nhãn Pha
-                    </label>
-                    <Input id="nhanPha" type="text" />
-                  </div>
-                  <div className="flex flex-col">
-                    <label className="mb-2 font-medium" htmlFor="nhomCay">
-                      Nhóm Cây
-                    </label>
-                    <Input id="nhomCay" type="text" />
-                  </div>
-                  <div className="flex flex-col">
-                    <label className="mb-2 font-medium" htmlFor="box">
-                      Box
-                    </label>
-                    <Select>
-                      <SelectTrigger id="box">
-                        <SelectValue placeholder="Chọn" />
-                      </SelectTrigger>
-                      <SelectContent position="popper">
-                        <SelectItem value="option1">Option 1</SelectItem>
-                        <SelectItem value="option2">Option 2</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="flex flex-col">
-                    <label className="mb-2 font-medium" htmlFor="nhapXuat">
-                      Nhập Xuất
-                    </label>
-                    <Select>
-                      <SelectTrigger id="nhapXuat">
-                        <SelectValue placeholder="Chọn" />
-                      </SelectTrigger>
-                      <SelectContent position="popper">
-                        <SelectItem value="nhap">Nhập</SelectItem>
-                        <SelectItem value="xuat">Xuất</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="flex flex-col">
-                    <label className="mb-2 font-medium" htmlFor="nvDo">
-                      Nv Độ
-                    </label>
-                    <Input id="nvDo" type="text" />
-                  </div>
-                  <div className="flex flex-col">
-                    <label className="mb-2 font-medium" htmlFor="dungTich">
-                      Dung Tích (Lit)
-                    </label>
-                    <Input id="dungTich" placeholder="0,0" type="text" />
-                  </div>
-                  <div className="flex flex-col">
-                    <label className="mb-2 font-medium" htmlFor="tCon">
-                      T.Con
-                    </label>
-                    <Input id="tCon" placeholder="0" type="text" />
-                  </div>
-                  <div className="flex flex-col">
-                    <label className="mb-2 font-medium" htmlFor="maTui">
-                      Mã Túi
-                    </label>
-                    <Select>
-                      <SelectTrigger id="maTui">
-                        <SelectValue placeholder="Chọn" />
-                      </SelectTrigger>
-                      <SelectContent position="popper">
-                        <SelectItem value="tui1">Túi 1</SelectItem>
-                        <SelectItem value="tui2">Túi 2</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="flex flex-col">
-                    <label className="mb-2 font-medium" htmlFor="tGian">
-                      TGian (phút)
-                    </label>
-                    <Input id="tGian" type="text" />
-                  </div>
-                  <div className="flex flex-col">
-                    <label className="mb-2 font-medium" htmlFor="phongMT">
-                      Phòng MT
-                    </label>
-                    <Select>
-                      <SelectTrigger id="phongMT">
-                        <SelectValue placeholder="Chọn" />
-                      </SelectTrigger>
-                      <SelectContent position="popper">
-                        <SelectItem value="phong1">Phòng 1</SelectItem>
-                        <SelectItem value="phong2">Phòng 2</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="flex flex-col">
-                    <label className="mb-2 font-medium" htmlFor="keMT">
-                      Kệ MT
-                    </label>
-                    <Select>
-                      <SelectTrigger id="keMT">
-                        <SelectValue placeholder="Chọn" />
-                      </SelectTrigger>
-                      <SelectContent position="popper">
-                        <SelectItem value="ke1">Kệ 1</SelectItem>
-                        <SelectItem value="ke2">Kệ 2</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="flex flex-col">
-                    <label className="mb-2 font-medium" htmlFor="maPhieu">
-                      Mã Phiếu
-                    </label>
-                    <Input id="maPhieu" type="text" />
-                  </div>
-                  <div className="flex flex-col">
-                    <label className="mb-2 font-medium" htmlFor="tuanKH">
-                      Tuần KH
-                    </label>
-                    <Input id="tuanKH" type="text" />
-                  </div>
-                  <div className="flex flex-col">
-                    <label className="mb-2 font-medium" htmlFor="thungTui">
-                      Thùng Túi
-                    </label>
-                    <Input id="thungTui" type="text" />
-                  </div>
-                  <div className="flex flex-col">
-                    <label className="mb-2 font-medium" htmlFor="ghiChu">
-                      Ghi Chú
-                    </label>
-                    <Input id="ghiChu" type="text" />
-                  </div>
-                </div>
-              </form>
-            </div>
-          </CardContent>
-          <CardContent>
-            <DataTable data={environments} columns={columns} fieldInputFilter={'phaseLabel'} />
+            <DataTable data={changingculturemediums?.data} columns={columns} />
           </CardContent>
         </Card>
       </div>
-      <DialogEnvironmentForm open={isAddTaskDialogOpen} setOpen={setAddTaskDialogOpen} />
+      <DialogEnvironmentForm
+        open={isAddTaskDialogOpen}
+        setOpen={setAddTaskDialogOpen}
+        bioSelect={bioSelect}
+        shelvesSelect={shelvesSelect}
+      />
     </>
   );
 };
-
 export default Environment;
