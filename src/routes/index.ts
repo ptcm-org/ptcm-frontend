@@ -6,7 +6,6 @@ import { ROUTES } from '@/constants';
 
 // Layouts
 import ProtectedRoutes from '@/components/ProtectedRoute';
-import Lazy from '@/components/Lazy';
 
 const Login = lazy(() => import('@/pages/Login'));
 const Dashboard = lazy(() => import('@/pages/PlantingDiary'));
@@ -26,6 +25,8 @@ const SettingPage = lazy(() => import('@/pages/Settings/Pages/SettingPage'));
 const OrderPages = lazy(() => import('@/pages/Orders/Pages/OrderPages'));
 const CreateOrder = lazy(() => import('@/pages/Orders/Pages/CreateOrder'));
 const SubCulturingPages = lazy(() => import('@/pages/SubCulturing/Pages/SubCulturingPages'));
+const CreateSubCulturingPage = lazy(() => import('@/pages/SubCulturing/Pages/CreateSubCulturingPage'));
+const UpdateSubCulturingPage = lazy(() => import('@/pages/SubCulturing/Pages/UpdateSubCulturingPage'));
 const InitiateCulturePages = lazy(() => import('@/pages/InitiateCulture/Pages/InitiateCulturePages'));
 const CulturingCellPages = lazy(() => import('@/pages/CulturingCell/Pages/CulturingCellPages'));
 
@@ -89,6 +90,14 @@ export const ROUTER = createBrowserRouter([
       {
         path: ROUTES.SUBCULTURING,
         Component: SubCulturingPages,
+      },
+      {
+        path: ROUTES.CREATESUBCULTURING,
+        Component: CreateSubCulturingPage,
+      },
+      {
+        path: ROUTES.UPDATESUBCULTURING,
+        Component: UpdateSubCulturingPage,
       },
       {
         path: ROUTES.INITIATECULTURE,

@@ -53,6 +53,10 @@ export const LOV_CONFIG_LIST = [
       key: 'contractType',
       title: 'Contract Type',
     },
+    {
+      key: 'plantCode',
+      title: 'Plant Code',
+    },
   ] as const;
   
   export const GLOBAL_SETTING_CONFIG_LIST = [

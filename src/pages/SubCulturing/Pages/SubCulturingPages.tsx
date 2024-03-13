@@ -1,12 +1,15 @@
-import { CreateWithTitleButton } from "@/components/ActionButtons";
-import { ORDER_STATUS_OPTIONS, ORDER_TYPE_OPTIONS, WEEKSOFYEAR } from "@/utils/commonConstantData";
-import { Button, Card, Col, Divider, Form, Input, Row, Select, Table, Typography } from "antd";
+import { CreateWithTitleButton, ViewButton } from "@/components/ActionButtons";
+import { DATE_TIME_PICKER_FORMAT, ORDER_STATUS_OPTIONS, ORDER_TYPE_OPTIONS, WEEKSOFYEAR } from "@/utils/commonConstantData";
+import { Button, Card, Col, Divider, Form, Input, Row, Select, Space, Table, TableColumnsType, Tooltip, Typography } from "antd";
 import { EditOutlined, FilterOutlined } from '@ant-design/icons';
+import { AlignType } from 'rc-table/lib/interface';
 import { lovStore } from "@/stores/lovStore";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useLovHook } from "@/pages/Settings/Lov/Hook";
+import { getLovValue, useLovHook } from "@/pages/Settings/Lov/Hook";
 import { producingCellCultureStore } from "@/stores/producingCellCultureStore";
+import dayjs from "dayjs";
+import { SubculturingDto } from "@/api/auth-proxies";
 
 const  SubCulturingPages = () => {
 
@@ -14,6 +17,7 @@ const  SubCulturingPages = () => {
     const navigate = useNavigate();
     const [openFilter, setOpenFilter] = useState<boolean>(false);
     const [filterForm] = Form.useForm();
+    const getLovs = lovStore(state => state.getLovs);
     const { getOptions } = useLovHook([
         'batch',
         'batchCode',
@@ -26,6 +30,8 @@ const  SubCulturingPages = () => {
     const filterSubculturings = producingCellCultureStore(state => state.filterSubculturings);
     const subculturingData = producingCellCultureStore(state => state.subculturingData);
     const isLoading = producingCellCultureStore(state => state.isLoading);
+    const getListEnvironments = producingCellCultureStore(state => state.getListEnvironments);
+    const environments = producingCellCultureStore(state => state.environmentData.environments);
     const onFinish = (value: any) => {
         console.log(value);
         //Handle Filter
@@ -33,7 +39,195 @@ const  SubCulturingPages = () => {
 
     useEffect(() => {
       filterSubculturings();
+      getLovs();
+      getListEnvironments();
     },[])
+
+
+    const SUBCULTURING_TABLE_COLUMS :  TableColumnsType<SubculturingDto> = [
+      {
+          title: 'Batch',
+          dataIndex: 'batch',
+          align: 'center' as AlignType,
+          render: (_, record) =>
+                getLovValue(lovData['batchCode'].value, record.batchCode),
+      },
+      {
+          title: 'Barcode',
+          dataIndex: 'barCode',
+          key: 'barCode',
+          align: 'center' as AlignType,
+          // render: (_, record) =>
+          //       getLovValue(lovData['batchCode'].value, record.batchCode),
+      },
+      {
+        title: 'Subculturing Date',
+        dataIndex: 'subculturingDate',
+        key: 'subculturingDate',
+        align: 'center' as AlignType,
+        render: (_, record) =>
+          dayjs(record.subculturingDate).format(DATE_TIME_PICKER_FORMAT),
+      },
+      {
+        title: 'Expired',
+        dataIndex: 'cutOfDate',
+        key: 'cutOfDate',
+        align: 'center' as AlignType,
+        render: (_, record) =>
+          dayjs(record.cutOfDate).format(DATE_TIME_PICKER_FORMAT),
+      },
+      {
+        title: 'Tissue Line Code',
+        dataIndex: 'tissueCultureLineCode',
+        align: 'center' as AlignType,
+        render: (_, record) =>
+              getLovValue(lovData['tissueLineCode'].value, record.tissueCultureLineCode),
+      },
+      {
+        title: 'Mother Stock',
+        dataIndex: 'motherStock',
+        align: 'center' as AlignType,
+      },
+      {
+        title: 'Plant Code',
+        dataIndex: 'plantCloning',
+        key: 'plantCloning',
+        align: 'center' as AlignType,
+        render: (_, record) =>
+              getLovValue(lovData['plantCode'].value, record.plantCloning),
+      },
+      {
+        title: 'Environment',
+        dataIndex: 'environmentId',
+        align: 'center' as AlignType,
+        render: (_, record) =>
+              environments.find((item) => item.id == record.environmentId)?.environmentName,
+      },
+      {
+        title: 'Tissue Culture Bags',
+        dataIndex: 'tissueCultureBags',
+        key: 'tissueCultureBags',
+        align: 'center' as AlignType,
+      },
+      {
+        title: 'Disposal Bags',
+        dataIndex: 'disposalBags',
+        key: 'disposalBags',
+        align: 'center' as AlignType,
+      },
+      {
+        title: 'Surplus Bags',
+        dataIndex: 'surplusBags',
+        key: 'surplusBags',
+        align: 'center' as AlignType,
+      },
+      {
+        title: 'Cell Culture Code',
+        dataIndex: 'cellCultureCode',
+        align: 'center' as AlignType,
+        render: (_, record) =>
+              getLovValue(lovData['cellCulture'].value, record.cellCultureCode),
+      },
+      {
+        title: 'Phase',
+        dataIndex: 'phaseIndex',
+        align: 'center' as AlignType,
+        render: (_, record) =>
+              getLovValue(lovData['phases'].value, record.phaseIndex),
+      },
+      {
+        title: 'Child Batch',
+        dataIndex: 'childBatchCode',
+        align: 'center' as AlignType,
+        render: (_, record) =>
+              getLovValue(lovData['batchCode'].value, record.childBatchCode),
+      },
+      {
+        title: 'Clean Count',
+        dataIndex: 'cleanCount',
+        key: 'cleanCount',
+        align: 'center' as AlignType,
+      },
+      {
+        title: 'Sterile Culture',
+        dataIndex: 'sterileCulture',
+        key: 'sterileCulture',
+        align: 'center' as AlignType,
+      },
+      {
+        title: 'Potential Infection Count',
+        dataIndex: 'potentialInfectionCount',
+        key: 'potentialInfectionCount',
+        align: 'center' as AlignType,
+      },
+      {
+        title: 'Culture Potential Infection',
+        dataIndex: 'culturePotentialInfection',
+        key: 'culturePotentialInfection',
+        align: 'center' as AlignType,
+      },
+      {
+        title: 'Mild Infection Count',
+        dataIndex: 'mildInfectionCount',
+        key: 'mildInfectionCount',
+        align: 'center' as AlignType,
+      },
+      {
+        title: 'Culture Mild Infection',
+        dataIndex: 'culturemildInfection',
+        key: 'culturemildInfection',
+        align: 'center' as AlignType,
+      },
+      {
+        title: 'Severe Infection Count',
+        dataIndex: 'severeInfectionCount',
+        key: 'severeInfectionCount',
+        align: 'center' as AlignType,
+      },
+      {
+        title: 'Culture Severe Infection',
+        dataIndex: 'cultureSevereInfection',
+        key: 'cultureSevereInfection',
+        align: 'center' as AlignType,
+      },
+      {
+        title: 'Customer Weeks',
+        dataIndex: 'customerWeeks',
+        key: 'customerWeeks',
+        align: 'center' as AlignType,
+        sorter: (a, b) => a.customerWeeks - b.customerWeeks,
+      },
+      {
+        title: 'Clonal Cluster',
+        dataIndex: 'clonalCluster',
+        key: 'clonalCluster',
+        align: 'center' as AlignType,
+        sorter: (a, b) => a.customerWeeks - b.customerWeeks,
+      },
+      {
+        title: 'Note',
+        dataIndex: 'notes',
+        key: 'notes',
+        align: 'center' as AlignType,
+      },
+        
+      {
+        title: 'Option',
+        width: '10%',
+        align: 'center',
+        render: (_text, record) => (
+          <Space>
+            <ViewButton title="View" href='' />
+            <Tooltip title="Edit">
+              <Button
+                icon={<EditOutlined />}
+                href={`/subculturings/${record.id}/update`}
+              />
+            </Tooltip>
+          </Space>
+        ),
+      },
+    ];
 
     return (
         <Card>
@@ -50,7 +244,7 @@ const  SubCulturingPages = () => {
               </Button>
               <CreateWithTitleButton
                 title='Create Subculturing'
-                onClick={() => navigate('/subculturing/create')}
+                onClick={() => navigate('/subculturings/create')}
               />
             </div>
           </div>
@@ -154,10 +348,10 @@ const  SubCulturingPages = () => {
           ) : null}
           <Table
             loading={isLoading}
-            columns={[]}
+            columns={SUBCULTURING_TABLE_COLUMS}
             bordered
-            //rowKey={(item) => item.id}
-            dataSource={[]}
+            rowKey={(item) => item.id}
+            dataSource={subculturingData.subculturings}
             scroll={{ x: 1300 }}
           />
         </Card>

@@ -349,7 +349,7 @@ export interface CreateSubCulturingDto {
   mildInfectionEnvironment: string;
   motherStock: string;
   notes?: string;
-  phaseIndex: number;
+  phaseIndex: string;
   plantCloning: string;
   potentialInfectionCount: number;
   potentialInfectionEnvironment: string;
@@ -470,11 +470,11 @@ export interface InitiateCultureDto {
 }
 
 export interface CreateEnvironmentIngredientDto {
-  barCode?: string;
-  ingredientCode?: string;
-  ingredientDescription?: string;
-  ingredientName?: string;
-  ingredientUnit?: string;
+  barCode: string;
+  ingredientCode: string;
+  ingredientDescription: string;
+  ingredientName: string;
+  ingredientUnit: string;
   status: string;
 }
 
@@ -531,10 +531,11 @@ export interface EnvironmentDto {
 
 export interface CreateCulturingPhaseDto {
   cellCultureCode: string;
+  cultureCycle: number;
   infectionRate: number;
   labCode: string;
   phaseCode: string;
-  phaseIndex: number;
+  phaseIndex: string;
   phaseName: string;
   producingRate: number;
   tissueCultureLineCode: string;
@@ -542,11 +543,12 @@ export interface CreateCulturingPhaseDto {
 
 export interface CulturingPhaseDto {
   cellCultureCode: string;
+  cultureCycle: number;
   id: string;
   infectionRate: number;
   labCode: string;
   phaseCode: string;
-  phaseIndex: number;
+  phaseIndex: string;
   phaseName: string;
   producingRate: number;
   tissueCultureLineCode: string;

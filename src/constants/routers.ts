@@ -16,6 +16,8 @@ export const ROUTES = {
   ORDERS: '/orders',
   CREATEORDER: '/orders/create',
   SUBCULTURING: '/subculturings',
+  CREATESUBCULTURING: '/subculturings/create',
+  UPDATESUBCULTURING: '/subculturings/:id/update',
   INITIATECULTURE: '/initiatecultures',
   CULTURINGCELL: '/culturingcells',
 };
