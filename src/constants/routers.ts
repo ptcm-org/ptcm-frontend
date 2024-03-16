@@ -6,6 +6,7 @@ export const ROUTES = {
   ENTER_INFECTED_SAMPLE_INFORMATION: '/enter-infected-sample-information',
   SCAN_FOR_INFECTED_SAMPLES: '/scan-for-infected-samples',
   ENVIRONMENT: '/environment',
+  PHASE_ENVIRONMENT: '/phase-environment',
   BRIGHT_ROOM: '/bright-room',
   USER: '/user',
   USER_MANAGEMENT: '/user-management',

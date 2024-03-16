@@ -12,7 +12,7 @@ import { getData } from '@/api/axios';
 import DialogIngredientForm from './components/DialogIngredientForm';
 import { DataTableIngredientRowActions } from './components/DataTableIngredientRowActions';
 import DialogEnvironmentForm from './components/DialogEnvironmentForm';
-import { DataTableEnvironmentRowActions } from './components/DataTableEnviromentRowActions ';
+import { DataTableEnvironmentRowActions } from './components/DataTableEnviromentRowActions';
 
 interface CommonData {
   id: string;
