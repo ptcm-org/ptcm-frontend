@@ -21,6 +21,7 @@ const UserManagement = lazy(() => import('@/pages/UserManagement'));
 const LOVSettingPage = lazy(() => import('@/pages/Settings/Lov/Pages/LovPage'));
 const CategoryPage = lazy(() => import('@/pages/Category'));
 const PTCMLogin = lazy(() => import('@/pages/Auth/Pages/LoginPage'));
+const PhaseEnvironment = lazy(() => import('@/pages/PhaseEnvironment'));
 
 export const ROUTER = createBrowserRouter([
   {
@@ -70,6 +71,10 @@ export const ROUTER = createBrowserRouter([
       {
         path: ROUTES.CATEGORY,
         Component: CategoryPage,
+      },
+      {
+        path: ROUTES.PHASE_ENVIRONMENT,
+        Component: PhaseEnvironment,
       },
     ],
   },

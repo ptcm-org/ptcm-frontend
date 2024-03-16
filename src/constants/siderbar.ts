@@ -9,6 +9,7 @@ import {
   PenBox,
   Send,
   Users,
+  Orbit,
 } from 'lucide-react';
 import { ROUTES } from '.';
 
@@ -61,6 +62,13 @@ export const sidebarNavItems: Link[] = [
     href: ROUTES.ENVIRONMENT,
     label: '',
     icon: Send,
+    variant: 'ghost',
+  },
+  {
+    title: 'Pha Môi Trường',
+    href: ROUTES.PHASE_ENVIRONMENT,
+    label: '',
+    icon: Orbit,
     variant: 'ghost',
   },
   {
