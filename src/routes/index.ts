@@ -29,6 +29,12 @@ const CreateSubCulturingPage = lazy(() => import('@/pages/SubCulturing/Pages/Cre
 const UpdateSubCulturingPage = lazy(() => import('@/pages/SubCulturing/Pages/UpdateSubCulturingPage'));
 const InitiateCulturePages = lazy(() => import('@/pages/InitiateCulture/Pages/InitiateCulturePages'));
 const CulturingCellPages = lazy(() => import('@/pages/CulturingCell/Pages/CulturingCellPages'));
+const CreateInitiateCulture = lazy(() => import('@/pages/InitiateCulture/Pages/CreateInitiateCulture'));
+const CreateCulturingCell = lazy(() => import('@/pages/CulturingCell/Pages/CreateCulturingCell'));
+const CellCultureRoomPages = lazy(() => import('@/pages/CellCultureRoom/Pages/CellCultureRoomPages'));
+const CreateCellCultureRoomPage = lazy(() => import('@/pages/CellCultureRoom/Pages/CreateCellCultureRoomPage'));
+const ContaminatedBatchPages = lazy(() => import('@/pages/ContaminatedBatch/Pages/ContaminatedBatchPages'));
+const CreateContaminatedBatchPage = lazy(() => import('@/pages/ContaminatedBatch/Pages/CreateContaminatedBatchPage'));
 
 export const ROUTER = createBrowserRouter([
   {
@@ -104,8 +110,36 @@ export const ROUTER = createBrowserRouter([
         Component: InitiateCulturePages,
       },
       {
+        path: ROUTES.CREATEINITIATECULTURE,
+        Component: CreateInitiateCulture,
+      },
+      {
+        path: ROUTES.UPDATEINITIATECULTURE,
+        Component: InitiateCulturePages,
+      },
+      {
         path: ROUTES.CULTURINGCELL,
         Component: CulturingCellPages,
+      },
+      {
+        path: ROUTES.CREATECULTURINGCELL,
+        Component: CreateCulturingCell,
+      },
+      {
+        path: ROUTES.CELLCULTURES,
+        Component: CellCultureRoomPages,
+      },
+      {
+        path: ROUTES.CREATECELLCULTURE,
+        Component: CreateCellCultureRoomPage,
+      },
+      {
+        path: ROUTES.CONTAMINATEBATCH,
+        Component: ContaminatedBatchPages,
+      },
+      {
+        path: ROUTES.CREATECONTAMINATEBATCH,
+        Component: CreateContaminatedBatchPage,
       },
       {
         path: 'settings',

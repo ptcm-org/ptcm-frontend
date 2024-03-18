@@ -8,13 +8,12 @@ import { useNavigate } from "react-router-dom";
 import { useLovHook } from "@/pages/Settings/Lov/Hook";
 import { producingCellCultureStore } from "@/stores/producingCellCultureStore";
 
-const  InitiateCulturePages = () => {
+const  ContaminatedBatchPages = () => {
 
     const lovData = lovStore(state => state.lovData);
     const navigate = useNavigate();
     const [openFilter, setOpenFilter] = useState<boolean>(false);
     const [filterForm] = Form.useForm();
-    const getLovs = lovStore(state => state.getLovs);
     const { getOptions } = useLovHook([
         'batch',
         'batchCode',
@@ -34,14 +33,13 @@ const  InitiateCulturePages = () => {
 
     useEffect(() => {
       filterSubculturings();
-      getLovs();
     },[])
 
     return (
         <Card>
           <div className="flex items-start justify-between">
             <Typography.Title level={4}>
-              Initiate Cultures
+              Culturing Cells
             </Typography.Title>
             <div className="flex space-x-2">
               <Button
@@ -51,8 +49,8 @@ const  InitiateCulturePages = () => {
                 Filter
               </Button>
               <CreateWithTitleButton
-                title='Create Initiate Culture'
-                onClick={() => navigate('/initiateculture/create')}
+                title='Create Culturing Cell'
+                onClick={() => navigate('/contaminatedbatch/create')}
               />
             </div>
           </div>
@@ -167,4 +165,4 @@ const  InitiateCulturePages = () => {
 
 }
 
-export default InitiateCulturePages;
+export default ContaminatedBatchPages;

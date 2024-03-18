@@ -1,9 +1,9 @@
 import { Card, Divider, Spin, Typography } from 'antd';
 import { producingCellCultureStore } from '@/stores/producingCellCultureStore';
-import CulturingCellForm from '../components/CulturingCellForm';
+import ContaminatedBatchForm from '../components/ContaminatedBatchForm';
 
 
-const CreateCulturingCell = () => {
+const CreateContaminatedBatchPage = () => {
   const isLoading = producingCellCultureStore(state => state.isLoading);
 
   const onFinish = async (value: any) => {
@@ -17,10 +17,10 @@ const CreateCulturingCell = () => {
       </Typography.Title>
       <Divider />
       <Spin spinning={isLoading}>
-        <CulturingCellForm type="create" onFinish={onFinish} />
+        <ContaminatedBatchForm type="create" onFinish={onFinish} />
       </Spin>
     </Card>
   );
 }
 
-export default CreateCulturingCell;
+export default CreateContaminatedBatchPage;

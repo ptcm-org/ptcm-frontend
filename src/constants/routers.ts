@@ -19,5 +19,13 @@ export const ROUTES = {
   CREATESUBCULTURING: '/subculturings/create',
   UPDATESUBCULTURING: '/subculturings/:id/update',
   INITIATECULTURE: '/initiatecultures',
+  CREATEINITIATECULTURE: '/initiateculture/create',
+  UPDATEINITIATECULTURE: '/initiatecultures/:id/update',
   CULTURINGCELL: '/culturingcells',
+  CREATECULTURINGCELL: '/culturingcell/create',
+  UPDATECULTURINGCELL: '/culturingcells/:id/update',
+  CELLCULTURES: '/cellculturerooms',
+  CREATECELLCULTURE: '/cellcultureroom/create',
+  CONTAMINATEBATCH: '/contaminatedbatchs',
+  CREATECONTAMINATEBATCH: '/contaminatedbatch/create'
 };

@@ -50,7 +50,7 @@ const  CulturingCellPages = () => {
               </Button>
               <CreateWithTitleButton
                 title='Create Culturing Cell'
-                onClick={() => navigate('/subculturing/create')}
+                onClick={() => navigate('/culturingcell/create')}
               />
             </div>
           </div>

@@ -13,7 +13,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 
-const InitiateCultureForm: React.FC<{
+const CellCultureRoomForm: React.FC<{
     type: 'update' | 'create';
     onFinish: (value: IInitiateCultureForm) => void;
   }> = ({ onFinish, type }) => {
@@ -47,13 +47,65 @@ const InitiateCultureForm: React.FC<{
       return (
         <Form form={form} layout="vertical" className="my-4" onFinish={onFinish}>
             <Row gutter={24}>
-                <Col span={24} md={12} xl={6}>
+                <Col span={24} md={12} xl={12}>
                     <Form.Item
                     label='BarCode'
                     name="barCode"
                     rules={[{ required: false }]}
                     >
                     <Input />
+                    </Form.Item>
+                </Col>
+                <Col span={24} md={12} xl={12}>
+                </Col>
+                <Col span={24} md={12} xl={6}>
+                    <Form.Item
+                    label='culturing Date'
+                    name="culturingCellDate"
+                    rules={[{ required: true }]}
+                    >
+                    <DatePicker
+                        className="w-full"
+                        format={DATE_FORMAT}
+                        disabledDate={d => !d || d.isAfter(dayjs())}
+                      />
+                    </Form.Item>
+                </Col>
+                <Col span={24} md={12} xl={6}>
+                    <Form.Item
+                    label='Weeks'
+                    name="weeks"
+                    rules={[{ required: true }]}
+                    >
+                    <Select
+                        showSearch
+                        options={WEEKSOFYEAR}
+                      />
+                    </Form.Item>
+                </Col>
+                <Col span={24} md={12} xl={6}>
+                    <Form.Item
+                    label='Customer Weeks'
+                    name="customerWeeks"
+                    rules={[{ required: true }]}
+                    >
+                    <Select
+                        showSearch
+                        options={WEEKSOFYEAR}
+                      />
+                    </Form.Item>
+                </Col>
+                <Col span={24} md={12} xl={6}>
+                    <Form.Item
+                    label='Transaction'
+                    name="transaction"
+                    rules={[{ required: true }]}
+                    >
+                    <Select
+                        showSearch
+                        options={getOptions.batchCode} 
+                        placeholder='--Select One--'
+                      />
                     </Form.Item>
                 </Col>
                 <Col span={24} md={12} xl={6}>
@@ -93,8 +145,8 @@ const InitiateCultureForm: React.FC<{
                 </Col>
                 <Col span={24} md={12} xl={6}>
                     <Form.Item
-                    label='Customer Weeks'
-                    name="customerWeeks"
+                    label='Environment Code'
+                    name="environmentCode"
                     rules={[{ required: true }]}
                     >
                     <Select
@@ -102,20 +154,7 @@ const InitiateCultureForm: React.FC<{
                         options={WEEKSOFYEAR}
                       />
                     </Form.Item>
-                </Col>
-                <Col span={24} md={12} xl={6}>
-                    <Form.Item
-                    label='Initiateculture Date'
-                    name="initiatecultureDate"
-                    rules={[{ required: true }]}
-                    >
-                    <DatePicker
-                        className="w-full"
-                        format={DATE_FORMAT}
-                        disabledDate={d => !d || d.isAfter(dayjs())}
-                      />
-                    </Form.Item>
-                </Col>
+                </Col>                
                 <Col span={24} md={12} xl={6}>
                     <Form.Item label='Plant Code' name="plantCloning">
                       <Select
@@ -123,16 +162,6 @@ const InitiateCultureForm: React.FC<{
                         options={getOptions.plantCode} 
                         placeholder='--Select One--'
                       />
-                    </Form.Item>
-                </Col>
-                <Col span={24} md={12} xl={6}>
-                    <Form.Item label='Mother Clusters' name="numOfMotherCluster">
-                        <InputNumber min={1} className="w-full" />
-                    </Form.Item>
-                </Col>
-                <Col span={24} md={12} xl={6}>
-                    <Form.Item label='Child Clusters' name="numOfChildCluster">
-                        <InputNumber min={1} className="w-full" />
                     </Form.Item>
                 </Col>
                 <Col span={24} md={12} xl={6}>
@@ -148,35 +177,103 @@ const InitiateCultureForm: React.FC<{
                       />
                     </Form.Item>
                 </Col>
+                <Col span={24} md={12} xl={6}>
+                    <Form.Item
+                    label='Phase'
+                    name="phaseIndex"
+                    rules={[{ required: true }]}
+                    >
+                    <Select
+                        showSearch
+                        options={getOptions.cellCulture} 
+                        placeholder='--Select One--'
+                    />
+                    </Form.Item>
+                </Col>
+                <Col span={24} md={12} xl={6}>
+                    <Form.Item
+                    label='Infection Level'
+                    name="infectionLevel"
+                    rules={[{ required: true }]}
+                    >
+                    <Select
+                        showSearch
+                        options={getOptions.cellCulture} 
+                        placeholder='--Select One--'
+                    />
+                    </Form.Item>
+                </Col>
+                <Col span={24} md={12} xl={6}>
+                    <Form.Item label='Child Bags' name="numOfChildBags">
+                        <InputNumber min={1} className="w-full" />
+                    </Form.Item>
+                </Col>
+                <Col span={24} md={12} xl={6}>
+                    <Form.Item label='Child Clusters' name="numOfChildCluster">
+                        <InputNumber min={1} className="w-full" />
+                    </Form.Item>
+                </Col>
+                <Col span={24} md={12} xl={6}>
+                    <Form.Item
+                    label='Clean Room'
+                    name="cleanRoomId"
+                    rules={[{ required: true }]}
+                    >
+                    <Select
+                        showSearch
+                        options={getOptions.cellCulture} 
+                        placeholder='--Select One--'
+                      />
+                    </Form.Item>
+                </Col>
+                <Col span={24} md={12} xl={6}>
+                    <Form.Item
+                    label='Shelve'
+                    name="shelveId"
+                    rules={[{ required: true }]}
+                    >
+                    <Select
+                        showSearch
+                        options={getOptions.cellCulture} 
+                        placeholder='--Select One--'
+                      />
+                    </Form.Item>
+                </Col>
+                <Col span={24} md={12} xl={6}>
+                    <Form.Item
+                    label='Status'
+                    name="cellCultureStatus"
+                    rules={[{ required: true }]}
+                    >
+                    <Select
+                        showSearch
+                        options={getOptions.cellCulture} 
+                        placeholder='--Select One--'
+                      />
+                    </Form.Item>
+                </Col>
+                <Col span={24} md={12} xl={6}>
+                    <Form.Item
+                    label='Employee'
+                    name="employeeIds"
+                    rules={[{ required: true }]}
+                    >
+                    <Select
+                        showSearch
+                        options={getOptions.cellCulture} 
+                        placeholder='--Select One--'
+                      />
+                    </Form.Item>
+                </Col>
                 <Col span={24} md={12} xl={12}>
                     <Form.Item
                     label='Note:'
-                    name="notes"
+                    name="cellCultureDescription"
                     rules={[{ required: false }]}
                     >
                     <TextArea />
                     </Form.Item>
                 </Col>
-                <Col span={24} md={12} xl={12}>
-                <Form.Item
-                    label="Assign to Employee"
-                    name="employees"
-                    rules={[{ required: true, message: 'Please select options' }]}
-                >
-                    <Transfer
-                        showSearch
-                        listStyle={{
-                            width: 250,
-                            height: 300,
-                        }}
-                        dataSource={employees.map((item) => ({key: item.id, title: clsx(item.employeeId, '---', item.firstName, item.middleName, item.lastName)}))}
-                        targetKeys={selectedKeys}
-                        onChange={handleChange}
-                        render={(item) => item.title}
-                    />
-                </Form.Item>
-                </Col>
-                
             </Row>
             <Divider />
             <div className="w-full flex mt-4 items-center justify-between">
@@ -196,4 +293,4 @@ const InitiateCultureForm: React.FC<{
     );
   }
 
-  export default InitiateCultureForm;
+  export default CellCultureRoomForm;
