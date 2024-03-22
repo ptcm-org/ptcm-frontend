@@ -1,12 +1,16 @@
 import { CreateWithTitleButton } from "@/components/ActionButtons";
 import { ORDER_STATUS_OPTIONS, ORDER_TYPE_OPTIONS, WEEKSOFYEAR } from "@/utils/commonConstantData";
-import { Button, Card, Col, Divider, Form, Input, Row, Select, Table, Typography } from "antd";
+import { Button, Card, Col, Divider, Form, Input, Row, Select, Table, TableColumnsType, Typography } from "antd";
 import { EditOutlined, FilterOutlined } from '@ant-design/icons';
 import { lovStore } from "@/stores/lovStore";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useLovHook } from "@/pages/Settings/Lov/Hook";
+import { getLovValue, useLovHook } from "@/pages/Settings/Lov/Hook";
 import { producingCellCultureStore } from "@/stores/producingCellCultureStore";
+import { CulturingCellDto } from "@/api/auth-proxies";
+import { AlignType } from 'rc-table/lib/interface';
+import dayjs from "dayjs";
+import clsx from "clsx";
 
 const  CulturingCellPages = () => {
 
@@ -34,6 +38,22 @@ const  CulturingCellPages = () => {
     useEffect(() => {
       filterSubculturings();
     },[])
+
+    const CULTURINGCELL_TABLE_COLUMNS: TableColumnsType<CulturingCellDto> = [
+      {
+        title: 'Barcode',
+        dataIndex: 'barCode',
+        key: 'barCode',
+        align: 'center' as AlignType,
+    },
+    // {
+    //   title: 'Tissue Line Code',
+    //   dataIndex: 'tissueCultureLineCode',
+    //   align: 'center' as AlignType,
+    //   render: (_, record) =>
+    //         getLovValue(lovData['tissueLineCode'].value, record.tissueCultureLineCode),
+    // },
+    ];
 
     return (
         <Card>

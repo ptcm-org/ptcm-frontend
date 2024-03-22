@@ -74,4 +74,20 @@ export const COLOR_BY_ALPHABET = [
     { char: 'Y', colorText: '#FFFF00' },
     { char: 'Z', colorText: '#480404' },
   ];
+
+  export interface InitiateCultureItem {
+    id: string;
+    initiatecultureId: string;
+    batchCode: string;
+    initiatecultureDate: string;
+    tissueCultureLineCode: string;
+    motherStock: string;
+    notes: string;
+    employee: string;
+    plantCloning: string;
+    weeks: string;
+    customerWeeks: string;
+    cellCultureCode: string;
+    status?: string;
+  }
   

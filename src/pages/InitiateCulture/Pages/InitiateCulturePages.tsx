@@ -1,5 +1,5 @@
 import { CreateWithTitleButton, ViewButton } from "@/components/ActionButtons";
-import { COMMON_DATE_FORMAT, DATE_TIME_PICKER_FORMAT, ORDER_STATUS_OPTIONS, ORDER_TYPE_OPTIONS, WEEKSOFYEAR } from "@/utils/commonConstantData";
+import { COMMON_DATE_FORMAT, DATE_TIME_PICKER_FORMAT, InitiateCultureItem, ORDER_STATUS_OPTIONS, ORDER_TYPE_OPTIONS, WEEKSOFYEAR } from "@/utils/commonConstantData";
 import { Button, Card, Col, Divider, Form, Input, Radio, RadioChangeEvent, Row, Select, Space, Table, TableColumnsType, Tag, Tooltip, Typography } from "antd";
 import { EditOutlined, FilterOutlined } from '@ant-design/icons';
 import { lovStore } from "@/stores/lovStore";
@@ -11,6 +11,7 @@ import { InitiateCultureDto } from "@/api/auth-proxies";
 import { AlignType } from 'rc-table/lib/interface';
 import dayjs from "dayjs";
 import clsx from "clsx";
+import { ListInitiateCultureToItems } from "@/utils/dataConverter";
 
 const  InitiateCulturePages = () => {
 
@@ -48,6 +49,92 @@ const  InitiateCulturePages = () => {
       console.log('radio checked', value);
       setDisplay(value);
     };
+
+
+    const INITIATECULTURE_ITEM_TABLE_COLUMS : TableColumnsType<InitiateCultureItem> = [
+      {
+        title: 'Initiateculture Date',
+        dataIndex: 'initiatecultureDate',
+        key: 'initiatecultureDate',
+        align: 'left' as AlignType,
+        render: (_, record) =>
+          <a href={`/initiateculture/${record.initiatecultureId}/update`} className="text-blue-800">{dayjs(record.initiatecultureDate).format('D-M-YYYY')}</a>,
+      },
+      {
+        title: 'Employee',
+        dataIndex: 'employee',
+        key: 'employee',
+        align: 'left' as AlignType,
+      },
+      {
+        title: 'Batch',
+        dataIndex: 'batch',
+        align: 'center' as AlignType,
+        render: (_, record) =>
+              getLovValue(lovData['batchCode'].value, record.batchCode),
+      },
+      {
+        title: 'Tissue Line Code',
+        dataIndex: 'tissueCultureLineCode',
+        align: 'center' as AlignType,
+        render: (_, record) =>
+              getLovValue(lovData['tissueLineCode'].value, record.tissueCultureLineCode),
+      },
+      {
+        title: 'Mother Stock',
+        dataIndex: 'motherStock',
+        align: 'center' as AlignType,
+      },
+      {
+        title: 'Plant Code',
+        dataIndex: 'plantCloning',
+        key: 'plantCloning',
+        align: 'center' as AlignType,
+        render: (_, record) =>
+              getLovValue(lovData['plantCode'].value, record.plantCloning),
+      },
+      {
+        title: 'Cell Culture Code',
+        dataIndex: 'cellCultureCode',
+        align: 'center' as AlignType,
+        render: (_, record) =>
+              getLovValue(lovData['cellCulture'].value, record.cellCultureCode),
+      },
+      {
+        title: 'Weeks',
+        dataIndex: 'weeks',
+        key: 'weeks',
+        align: 'center' as AlignType,
+      },
+      {
+        title: 'Customer Weeks',
+        dataIndex: 'customerWeeks',
+        key: 'customerWeeks',
+        align: 'center' as AlignType,
+      },
+      {
+        title: 'Notes',
+        dataIndex: 'notes',
+        key: 'notes',
+        align: 'left' as AlignType,
+      },
+      {
+        title: 'Option',
+        width: '10%',
+        align: 'center',
+        render: (_text, record) => (
+          <Space>
+            <ViewButton title="View" href='' />
+            <Tooltip title="Edit">
+              <Button
+                icon={<EditOutlined />}
+                href={`/initiateculture/${record.initiatecultureId}/update`}
+              />
+            </Tooltip>
+          </Space>
+        ),
+      },
+    ];
 
     const INITIATECULTURE_TABLE_COLUMS :  TableColumnsType<InitiateCultureDto> = [
       {
@@ -90,6 +177,13 @@ const  InitiateCulturePages = () => {
         align: 'center' as AlignType,
         render: (_, record) =>
               getLovValue(lovData['plantCode'].value, record.plantCloning),
+      },
+      {
+        title: 'Cell Culture Code',
+        dataIndex: 'cellCultureCode',
+        align: 'center' as AlignType,
+        render: (_, record) =>
+              getLovValue(lovData['cellCulture'].value, record.cellCultureCode),
       },
       {
         title: 'Customer Weeks',
@@ -263,14 +357,26 @@ const  InitiateCulturePages = () => {
               <Radio.Button value="employees">By Employees</Radio.Button>
             </Radio.Group>
           </div>
-          <Table
+          {display === 'list' ? 
+            (<Table
             loading={isLoading}
             columns={INITIATECULTURE_TABLE_COLUMS}
             bordered
             rowKey={(item) => item.id}
             dataSource={initiatecultures}
             scroll={{ x: 1300 }}
+          />) : (
+            <Table
+            loading={isLoading}
+            columns={INITIATECULTURE_ITEM_TABLE_COLUMS}
+            bordered
+            rowKey={(item) => item.id}
+            dataSource={ListInitiateCultureToItems(initiatecultures)}
+            scroll={{ x: 1300 }}
           />
+          )
+          }
+          
         </Card>
       );
 
