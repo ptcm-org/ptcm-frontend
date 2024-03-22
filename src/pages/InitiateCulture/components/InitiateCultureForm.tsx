@@ -22,6 +22,7 @@ const InitiateCultureForm: React.FC<{
     const getLovs = lovStore(state => state.getLovs);
     const getListEmployees = producingCellCultureStore(state => state.getListEmployees);
     const employees = producingCellCultureStore(state => state.employeeData.employees);
+    const initiateCulture = producingCellCultureStore(state => state.initiateCultureData.initiateCulture);
 
     const { getOptions } = useLovHook([
         'batch',
@@ -41,8 +42,20 @@ const InitiateCultureForm: React.FC<{
       };
 
       useEffect(() => {
+        getLovs();
         getListEmployees();
      },[]);
+
+     useEffect(() => {
+        if (type === 'update' && initiateCulture) {
+            const { initiatecultureDate } = initiateCulture;
+          form.setFieldsValue({
+            ...initiateCulture,
+            initiatecultureDate: initiatecultureDate ? dayjs(initiatecultureDate) : null,
+          });
+          setSelectedKeys(initiateCulture.employees);
+        }
+      }, [initiateCulture, form, type]);
 
       return (
         <Form form={form} layout="vertical" className="my-4" onFinish={onFinish}>
@@ -159,7 +172,7 @@ const InitiateCultureForm: React.FC<{
                 </Col>
                 <Col span={24} md={12} xl={12}>
                 <Form.Item
-                    label="Assign to Employee"
+                    label="Assign Employees"
                     name="employees"
                     rules={[{ required: true, message: 'Please select options' }]}
                 >
@@ -184,7 +197,7 @@ const InitiateCultureForm: React.FC<{
                     (*) Required
                 </p>
                 <div className="space-x-4">
-                <Button onClick={() => navigate('/subculturings')}>
+                <Button onClick={() => navigate('/initiatecultures')}>
                     Back
                 </Button>
                 <Button type="primary" htmlType="submit">

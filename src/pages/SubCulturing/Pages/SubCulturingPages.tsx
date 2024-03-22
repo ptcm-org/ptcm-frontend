@@ -210,7 +210,6 @@ const  SubCulturingPages = () => {
         key: 'notes',
         align: 'center' as AlignType,
       },
-        
       {
         title: 'Option',
         width: '10%',

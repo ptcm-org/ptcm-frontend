@@ -1,12 +1,16 @@
-import { CreateWithTitleButton } from "@/components/ActionButtons";
-import { ORDER_STATUS_OPTIONS, ORDER_TYPE_OPTIONS, WEEKSOFYEAR } from "@/utils/commonConstantData";
-import { Button, Card, Col, Divider, Form, Input, Row, Select, Table, Typography } from "antd";
+import { CreateWithTitleButton, ViewButton } from "@/components/ActionButtons";
+import { COMMON_DATE_FORMAT, DATE_TIME_PICKER_FORMAT, ORDER_STATUS_OPTIONS, ORDER_TYPE_OPTIONS, WEEKSOFYEAR } from "@/utils/commonConstantData";
+import { Button, Card, Col, Divider, Form, Input, Radio, RadioChangeEvent, Row, Select, Space, Table, TableColumnsType, Tag, Tooltip, Typography } from "antd";
 import { EditOutlined, FilterOutlined } from '@ant-design/icons';
 import { lovStore } from "@/stores/lovStore";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useLovHook } from "@/pages/Settings/Lov/Hook";
+import { useLovHook, getLovValue } from "@/pages/Settings/Lov/Hook";
 import { producingCellCultureStore } from "@/stores/producingCellCultureStore";
+import { InitiateCultureDto } from "@/api/auth-proxies";
+import { AlignType } from 'rc-table/lib/interface';
+import dayjs from "dayjs";
+import clsx from "clsx";
 
 const  InitiateCulturePages = () => {
 
@@ -27,15 +31,114 @@ const  InitiateCulturePages = () => {
     const filterSubculturings = producingCellCultureStore(state => state.filterSubculturings);
     const subculturingData = producingCellCultureStore(state => state.subculturingData);
     const isLoading = producingCellCultureStore(state => state.isLoading);
+    const initiatecultures = producingCellCultureStore(state => state.initiateCultureData.initiateCultures);
+    const filterInitiateCultures = producingCellCultureStore(state => state.filterInitiateCultures);
+    const [display, setDisplay] = useState<string>('list');
     const onFinish = (value: any) => {
         console.log(value);
         //Handle Filter
       };
 
     useEffect(() => {
-      filterSubculturings();
       getLovs();
+      filterInitiateCultures();
     },[])
+
+    const onChangeDisplay = ({ target: { value } }: RadioChangeEvent) => {
+      console.log('radio checked', value);
+      setDisplay(value);
+    };
+
+    const INITIATECULTURE_TABLE_COLUMS :  TableColumnsType<InitiateCultureDto> = [
+      {
+        title: 'Initiateculture Date',
+        dataIndex: 'initiatecultureDate',
+        key: 'initiatecultureDate',
+        align: 'center' as AlignType,
+        render: (_, record) =>
+          <a href={`/initiateculture/${record.id}/update`} className="text-blue-800">{dayjs(record.initiatecultureDate).format('D-M-YYYY')}</a>,
+      },
+      {
+          title: 'Batch',
+          dataIndex: 'batch',
+          align: 'center' as AlignType,
+          render: (_, record) =>
+                getLovValue(lovData['batchCode'].value, record.batchCode),
+      },
+      {
+          title: 'Barcode',
+          dataIndex: 'barCode',
+          key: 'barCode',
+          align: 'center' as AlignType,
+      },
+      {
+        title: 'Tissue Line Code',
+        dataIndex: 'tissueCultureLineCode',
+        align: 'center' as AlignType,
+        render: (_, record) =>
+              getLovValue(lovData['tissueLineCode'].value, record.tissueCultureLineCode),
+      },
+      {
+        title: 'Mother Stock',
+        dataIndex: 'motherStock',
+        align: 'center' as AlignType,
+      },
+      {
+        title: 'Plant Code',
+        dataIndex: 'plantCloning',
+        key: 'plantCloning',
+        align: 'center' as AlignType,
+        render: (_, record) =>
+              getLovValue(lovData['plantCode'].value, record.plantCloning),
+      },
+      {
+        title: 'Customer Weeks',
+        dataIndex: 'customerWeeks',
+        key: 'customerWeeks',
+        align: 'center' as AlignType,
+      },
+      {
+        title: 'Employees',
+        dataIndex: 'employees',
+        align: 'left' as AlignType,
+        render: (_, record) => (
+          <>
+          {
+            record?.employees?.map((employee) => {              
+              const employeeData = JSON.parse(employee);
+              console.log(employeeData);
+              return (
+                <Tag color='green' key={employeeData?._id}>
+                  {clsx(employeeData.employeeId, '-', employeeData.firstName, employeeData.middleName, employeeData.lastName).toLocaleLowerCase()}
+                </Tag>
+              )
+            })}
+          </>
+        )     
+      },
+      {
+        title: 'Note',
+        dataIndex: 'notes',
+        key: 'notes',
+        align: 'center' as AlignType,
+      },
+      {
+        title: 'Option',
+        width: '10%',
+        align: 'center',
+        render: (_text, record) => (
+          <Space>
+            <ViewButton title="View" href='' />
+            <Tooltip title="Edit">
+              <Button
+                icon={<EditOutlined />}
+                href={`/initiateculture/${record.id}/update`}
+              />
+            </Tooltip>
+          </Space>
+        ),
+      },
+    ];
 
     return (
         <Card>
@@ -154,12 +257,18 @@ const  InitiateCulturePages = () => {
               </Form>
             </Card>
           ) : null}
+          <div className="flex items-start justify-end m-1">
+            <Radio.Group onChange={onChangeDisplay} value={display}>
+              <Radio.Button value="list">By List</Radio.Button>
+              <Radio.Button value="employees">By Employees</Radio.Button>
+            </Radio.Group>
+          </div>
           <Table
             loading={isLoading}
-            columns={[]}
+            columns={INITIATECULTURE_TABLE_COLUMS}
             bordered
-            //rowKey={(item) => item.id}
-            dataSource={[]}
+            rowKey={(item) => item.id}
+            dataSource={initiatecultures}
             scroll={{ x: 1300 }}
           />
         </Card>

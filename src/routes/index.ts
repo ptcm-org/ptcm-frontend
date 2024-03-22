@@ -35,6 +35,7 @@ const CellCultureRoomPages = lazy(() => import('@/pages/CellCultureRoom/Pages/Ce
 const CreateCellCultureRoomPage = lazy(() => import('@/pages/CellCultureRoom/Pages/CreateCellCultureRoomPage'));
 const ContaminatedBatchPages = lazy(() => import('@/pages/ContaminatedBatch/Pages/ContaminatedBatchPages'));
 const CreateContaminatedBatchPage = lazy(() => import('@/pages/ContaminatedBatch/Pages/CreateContaminatedBatchPage'));
+const UpdateInitiateCulture = lazy(() => import('@/pages/InitiateCulture/Pages/UpdateInitiateCulture'));
 
 export const ROUTER = createBrowserRouter([
   {
@@ -115,7 +116,7 @@ export const ROUTER = createBrowserRouter([
       },
       {
         path: ROUTES.UPDATEINITIATECULTURE,
-        Component: InitiateCulturePages,
+        Component: UpdateInitiateCulture,
       },
       {
         path: ROUTES.CULTURINGCELL,
