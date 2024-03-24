@@ -145,6 +145,54 @@ export interface CreateUserDto {
   roleId: string;
 }
 
+export type CreateCustomerDtoPhoneNumber = { [key: string]: any };
+
+export type CreateCustomerDtoContactInfo = { [key: string]: any };
+
+export interface CreateCustomerDto {
+  bunisseType: string;
+  city: string;
+  contactInfo?: CreateCustomerDtoContactInfo;
+  country: string;
+  customerAddress1: string;
+  customerAddress2?: string;
+  customerName: string;
+  emailAddress: string;
+  phoneNumber?: CreateCustomerDtoPhoneNumber;
+  postalCode: string;
+  province: string;
+  status?: string;
+  website?: string;
+}
+
+export interface UpdateCustomerDto {
+  customer: CreateCustomerDto;
+  id: string;
+}
+
+export type CustomerDtoPhoneNumber = { [key: string]: any };
+
+export type CustomerDtoContactInfo = { [key: string]: any };
+
+export interface CustomerDto {
+  bunisseType: string;
+  city: string;
+  contactInfo: CustomerDtoContactInfo;
+  country: string;
+  createdAt: string;
+  customerAddress1: string;
+  customerAddress2: string;
+  customerName: string;
+  emailAddress: string;
+  id: string;
+  phoneNumber: CustomerDtoPhoneNumber;
+  postalCode: string;
+  province: string;
+  status: string;
+  updatedAt: string;
+  website: string;
+}
+
 export interface CreateChangingCultureMediumDto {
   bagBox?: string;
   bagCode: string;
@@ -349,7 +397,7 @@ export interface CreateSubCulturingDto {
   mildInfectionEnvironment: string;
   motherStock: string;
   notes?: string;
-  phaseIndex: number;
+  phaseIndex: string;
   plantCloning: string;
   potentialInfectionCount: number;
   potentialInfectionEnvironment: string;
@@ -425,19 +473,12 @@ export interface PlantInfectionDto {
   infectionStatus: string;
 }
 
-export interface UpdateInitiateCultureDto {
-  id: string;
-  initiateCulture: CreateInitiateCultureDto;
-}
-
-export type CreateInitiateCultureDtoEmployeesItem = { [key: string]: any };
-
 export interface CreateInitiateCultureDto {
   barCode: string;
   batchCode: string;
   cellCultureCode: string;
   customerWeeks: number;
-  employees: CreateInitiateCultureDtoEmployeesItem[];
+  employees: string[];
   initiatecultureDate: string;
   motherStock: string;
   notes: string;
@@ -448,7 +489,10 @@ export interface CreateInitiateCultureDto {
   tissueCultureLineCode: string;
 }
 
-export type InitiateCultureDtoEmployeesItem = { [key: string]: any };
+export interface UpdateInitiateCultureDto {
+  id: string;
+  initiateCulture: CreateInitiateCultureDto;
+}
 
 export interface InitiateCultureDto {
   barCode: string;
@@ -456,7 +500,7 @@ export interface InitiateCultureDto {
   cellCultureCode: string;
   createdAt: string;
   customerWeeks: number;
-  employees: InitiateCultureDtoEmployeesItem[];
+  employees: string[];
   id: string;
   initiatecultureDate: string;
   motherStock: string;
@@ -470,11 +514,11 @@ export interface InitiateCultureDto {
 }
 
 export interface CreateEnvironmentIngredientDto {
-  barCode?: string;
-  ingredientCode?: string;
-  ingredientDescription?: string;
-  ingredientName?: string;
-  ingredientUnit?: string;
+  barCode: string;
+  ingredientCode: string;
+  ingredientDescription: string;
+  ingredientName: string;
+  ingredientUnit: string;
   status: string;
 }
 
@@ -531,10 +575,11 @@ export interface EnvironmentDto {
 
 export interface CreateCulturingPhaseDto {
   cellCultureCode: string;
+  cultureCycle: number;
   infectionRate: number;
   labCode: string;
   phaseCode: string;
-  phaseIndex: number;
+  phaseIndex: string;
   phaseName: string;
   producingRate: number;
   tissueCultureLineCode: string;
@@ -542,11 +587,12 @@ export interface CreateCulturingPhaseDto {
 
 export interface CulturingPhaseDto {
   cellCultureCode: string;
+  cultureCycle: number;
   id: string;
   infectionRate: number;
   labCode: string;
   phaseCode: string;
-  phaseIndex: number;
+  phaseIndex: string;
   phaseName: string;
   producingRate: number;
   tissueCultureLineCode: string;
@@ -1294,6 +1340,32 @@ export const changingCultureMediumControllerGetChangingCultureMediumById = (id: 
   return customInstance<ChangingCultureMediumDto>({ url: `/api/changingculturemedium/${id}`, method: 'GET' });
 };
 
+export const customerControllerGetCustomers = () => {
+  return customInstance<CustomerDto[]>({ url: `/api/customer`, method: 'GET' });
+};
+
+export const customerControllerCreateCustomer = (createCustomerDto: CreateCustomerDto) => {
+  return customInstance<CustomerDto>({
+    url: `/api/customer`,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    data: createCustomerDto,
+  });
+};
+
+export const customerControllerUpdateCustomer = (updateCustomerDto: UpdateCustomerDto) => {
+  return customInstance<CustomerDto>({
+    url: `/api/customer`,
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    data: updateCustomerDto,
+  });
+};
+
+export const customerControllerGetCustomerById = (id: string) => {
+  return customInstance<CustomerDto>({ url: `/api/customer/${id}`, method: 'GET' });
+};
+
 export const authControllerCreateUser = (createUserDto: CreateUserDto) => {
   return customInstance<User>({
     url: `/api/auth/createUser`,
@@ -1612,6 +1684,18 @@ export type ChangingCultureMediumControllerGetListCellCultureMediumByEnvironment
 >;
 export type ChangingCultureMediumControllerGetChangingCultureMediumByIdResult = NonNullable<
   Awaited<ReturnType<typeof changingCultureMediumControllerGetChangingCultureMediumById>>
+>;
+export type CustomerControllerGetCustomersResult = NonNullable<
+  Awaited<ReturnType<typeof customerControllerGetCustomers>>
+>;
+export type CustomerControllerCreateCustomerResult = NonNullable<
+  Awaited<ReturnType<typeof customerControllerCreateCustomer>>
+>;
+export type CustomerControllerUpdateCustomerResult = NonNullable<
+  Awaited<ReturnType<typeof customerControllerUpdateCustomer>>
+>;
+export type CustomerControllerGetCustomerByIdResult = NonNullable<
+  Awaited<ReturnType<typeof customerControllerGetCustomerById>>
 >;
 export type AuthControllerCreateUserResult = NonNullable<Awaited<ReturnType<typeof authControllerCreateUser>>>;
 export type AuthControllerLoginResult = NonNullable<Awaited<ReturnType<typeof authControllerLogin>>>;

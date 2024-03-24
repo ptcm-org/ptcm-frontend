@@ -10,6 +10,7 @@ import {
   Send,
   Users,
   Orbit,
+  BookUser,
 } from 'lucide-react';
 import { ROUTES } from '.';
 
@@ -97,6 +98,13 @@ export const sidebarNavItems: Link[] = [
     href: ROUTES.CATEGORY,
     label: '',
     icon: BookMinus,
+    variant: 'ghost',
+  },
+  {
+    title: 'Khách hàng',
+    href: ROUTES.CUSTOMER,
+    label: '',
+    icon: BookUser,
     variant: 'ghost',
   },
 ];
