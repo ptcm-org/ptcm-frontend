@@ -13,13 +13,6 @@ import {
 } from '@/components/ui/dropdown-menu';
 import DialogPhaseEnvironmentForm from './DialogPhaseEnvironmentForm';
 
-interface Invoice {
-  invoice: string;
-  paymentStatus: string;
-  totalAmount: string;
-  paymentMethod: string;
-}
-
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
 }
@@ -27,7 +20,6 @@ interface DataTableRowActionsProps<TData> {
 export function DataPhaseEnvironmentTableRowActions<TData>({ row }: DataTableRowActionsProps<TData>) {
   // const { toast } = useToast();
   // const { mutate } = useSWRConfig();
-  const [openTable, setOpenTable] = useState(false);
   const [openForm, setOpenForm] = useState(false);
 
   const openDialogForm = () => {
@@ -53,7 +45,7 @@ export function DataPhaseEnvironmentTableRowActions<TData>({ row }: DataTableRow
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className={`flex h-8 w-8 p-0 ${openTable || openForm ? 'bg-muted' : ''}`}>
+          <Button variant="ghost" className={`flex h-8 w-8 p-0 ${openForm ? 'bg-muted' : ''}`}>
             <DotsHorizontalIcon className="h-4 w-4" />
             <span className="sr-only">Open menu</span>
           </Button>

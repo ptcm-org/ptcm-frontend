@@ -13,4 +13,5 @@ export const ROUTES = {
   PTCM_LOGIN: 'auth/login',
   LOV: 'settings/lov',
   CATEGORY: '/category',
+  CUSTOMER: '/customer',
 };

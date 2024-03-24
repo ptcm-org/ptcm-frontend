@@ -172,7 +172,7 @@ const PhaseEnvironment = () => {
             <CardTitle>Bảng pha môi trường</CardTitle>
           </CardHeader>
           <CardContent>
-            <DataTable data={data?.data} columns={columnsEnvironment} fieldInputFilter={'environmentName'} />
+            <DataTable data={data?.data} columns={columnsEnvironment} />
           </CardContent>
         </Card>
       </div>
