@@ -22,6 +22,33 @@ export type RolesControllerGetRolesParams = {
 
 export type NotificationControllerGetNotifications200Item = { [key: string]: any };
 
+export type SubculturingControllerGetListSubculturingItemDetailsParams = {
+  barCode?: string;
+  batchCode?: string;
+  subculturingDate?: string;
+  tissueCultureLineCode?: string;
+  cutOfDate?: string;
+  motherStock?: string;
+  customerWeeks?: string;
+};
+
+export type InitiateCultureControllerGetInitiateCulturesByEmployeeId200 = { [key: string]: any };
+
+export type InitiateCultureControllerGetInitiateCulturesByEmployeeIdParams = {
+  batchCode?: string;
+  barCode?: string;
+  tissueCultureLineCode?: string;
+  motherStock?: string;
+  page?: number;
+  limit?: number;
+  sort?: string;
+  filterType?: string;
+  customStartTime?: string;
+  customEndTime?: string;
+  status?: string;
+  cellCultureCode?: string;
+};
+
 export type UsersControllerFindAllParams = {
   searchText?: string;
   limit?: number;
@@ -143,6 +170,64 @@ export interface CreateUserDto {
   organizationId: string;
   password: string;
   roleId: string;
+}
+
+export interface CreateCellCultureRoomDto {
+  barCode: string;
+  batchCode: string;
+  cellCultureCode: string;
+  cellCultureDescription: string;
+  cellCultureStatus: string;
+  cleanRoomId: string;
+  creatorId: string;
+  cultureDate: string;
+  cultureWeek: string;
+  customerWeeks: string;
+  employeeIds: string[];
+  environmentCode: string;
+  exportInfo: string;
+  infectionCode: string;
+  motherStock: string;
+  numOfChildBags: number;
+  numOfChildCluster: number;
+  phaseIndex: string;
+  plantCloning: string;
+  shelveId: string;
+  status: string;
+  tissueCultureLineCode: string;
+}
+
+export interface UpdateCellCultureRoomDto {
+  cellCultureRoomRequest: CreateCellCultureRoomDto;
+  id: string;
+}
+
+export interface CellCultureRoomDto {
+  barCode: string;
+  batchCode: string;
+  cellCultureCode: string;
+  cellCultureDescription: string;
+  cellCultureStatus: string;
+  cleanRoomId: string;
+  createdAt: string;
+  creatorId: string;
+  cultureDate: string;
+  cultureWeek: string;
+  customerWeeks: string;
+  employeeIds: string[];
+  environmentCode: string;
+  exportInfo: string;
+  id: string;
+  infectionCode: string;
+  motherStock: string;
+  numOfChildBags: number;
+  numOfChildCluster: number;
+  phaseIndex: string;
+  plantCloning: string;
+  shelveId: string;
+  status: string;
+  tissueCultureLineCode: string;
+  updatedAt: string;
 }
 
 export interface CreateContaminatedBatchDto {
@@ -431,6 +516,21 @@ export interface OrderDto {
   yearDelivered: number;
 }
 
+export interface GetSubculturingItemDetailResponseDto {
+  barCode: string;
+  batchCode: string;
+  environmentCode?: string;
+  expectedBags?: number;
+  motherStock: string;
+  notes: string;
+  plantCloning: string;
+  remainBags?: number;
+  subculturingId: string;
+  tissueCultureBags?: number;
+  tissueCulturedBags?: number;
+  tissueCultureLineCode: string;
+}
+
 export interface CreateSubCulturingDto {
   barCode: string;
   batchCode: string;
@@ -442,7 +542,7 @@ export interface CreateSubCulturingDto {
   culturemildInfection: number;
   culturePotentialInfection: number;
   cultureSevereInfection: number;
-  customerWeeks: number;
+  customerWeeks: string;
   cutOfDate: string;
   disposalBags: number;
   employeeId: string;
@@ -469,6 +569,8 @@ export interface UpdateSubCulturingDto {
   subculturing: CreateSubCulturingDto;
 }
 
+export type SubculturingDtoSubItemsItem = { [key: string]: any };
+
 export interface SubculturingDto {
   barCode: string;
   batchCode: string;
@@ -481,7 +583,7 @@ export interface SubculturingDto {
   culturemildInfection: number;
   culturePotentialInfection: number;
   cultureSevereInfection: number;
-  customerWeeks: number;
+  customerWeeks: string;
   cutOfDate: string;
   disposalBags: number;
   employeeId: string;
@@ -499,6 +601,8 @@ export interface SubculturingDto {
   severeInfectionEnvironment: string;
   sterileCulture: number;
   subculturingDate: string;
+  subculturingItems: string[];
+  subItems: SubculturingDtoSubItemsItem[];
   surplusBags: number;
   tissueCultureBags: number;
   tissueCultureLineCode: string;
@@ -764,36 +868,12 @@ export interface CreateBioEmployeeDto {
   phone: CreateBioEmployeeDtoPhone;
   status: string;
   teamId?: string;
+  userId?: string;
 }
 
 export interface UpdateBioEmployeeDto {
   employee: CreateBioEmployeeDto;
   id: string;
-}
-
-export type BioEmployeeDtoPhone = { [key: string]: any };
-
-export type BioEmployeeDtoContract = { [key: string]: any };
-
-export interface BioEmployeeDto {
-  contract: BioEmployeeDtoContract;
-  createdAt: string;
-  departmentId?: string;
-  directManagerId?: string;
-  dob: string;
-  email: string;
-  employeeId: string;
-  firstName: string;
-  gender: string;
-  id: string;
-  jobTitleCd: string;
-  lastName: string;
-  middleName: string;
-  nickName: string;
-  phone: BioEmployeeDtoPhone;
-  status: string;
-  teamId?: string;
-  updatedAt: string;
 }
 
 export interface CreateShelveDto {
@@ -878,6 +958,39 @@ export interface User {
   roleId: UserRoleId;
 }
 
+export interface UserProfileDto {
+  email: string;
+  employeeData?: BioEmployeeDto;
+  role: string;
+  userId: string;
+}
+
+export type BioEmployeeDtoPhone = { [key: string]: any };
+
+export type BioEmployeeDtoContract = { [key: string]: any };
+
+export interface BioEmployeeDto {
+  contract: BioEmployeeDtoContract;
+  createdAt: string;
+  departmentId?: string;
+  directManagerId?: string;
+  dob: string;
+  email: string;
+  employeeId: string;
+  firstName: string;
+  gender: string;
+  id: string;
+  jobTitleCd: string;
+  lastName: string;
+  middleName: string;
+  nickName: string;
+  phone: BioEmployeeDtoPhone;
+  status: string;
+  teamId?: string;
+  updatedAt: string;
+  userId?: string;
+}
+
 export interface GetUsersResponse {
   [key: string]: any;
 }
@@ -925,6 +1038,10 @@ export const fileUploadControllerGetFileUrl = (fileUrl: string) => {
 
 export const usersControllerFindAll = (params?: UsersControllerFindAllParams) => {
   return customInstance<GetUsersResponse>({ url: `/api/users`, method: 'GET', params });
+};
+
+export const usersControllerGetProfile = () => {
+  return customInstance<UserProfileDto>({ url: `/api/users/profile`, method: 'GET' });
 };
 
 export const usersControllerFindOneByEmail = (email: string) => {
@@ -1210,6 +1327,17 @@ export const initiateCultureControllerGetInitiateCultureByBarCode = (barCode: st
   return customInstance<InitiateCultureDto>({ url: `/api/initiateculture/detailByBarCode/${barCode}`, method: 'GET' });
 };
 
+export const initiateCultureControllerGetInitiateCulturesByEmployeeId = (
+  id: string,
+  params?: InitiateCultureControllerGetInitiateCulturesByEmployeeIdParams,
+) => {
+  return customInstance<InitiateCultureControllerGetInitiateCulturesByEmployeeId200>({
+    url: `/api/initiateculture/employee/${id}`,
+    method: 'GET',
+    params,
+  });
+};
+
 export const plantInfectionControllerGetPlantInfections = () => {
   return customInstance<PlantInfectionDto[]>({ url: `/api/plantinfection`, method: 'GET' });
 };
@@ -1260,6 +1388,17 @@ export const subculturingControllerGetSubculturingById = (id: string) => {
 
 export const subculturingControllerGetSubculturingByBarCode = (barCode: string) => {
   return customInstance<SubculturingDto>({ url: `/api/subculturing/detailByBarCode/${barCode}`, method: 'GET' });
+};
+
+export const subculturingControllerGetListSubculturingItemDetails = (
+  id: string,
+  params?: SubculturingControllerGetListSubculturingItemDetailsParams,
+) => {
+  return customInstance<GetSubculturingItemDetailResponseDto[]>({
+    url: `/api/subculturing/get-items-detail/${id}`,
+    method: 'GET',
+    params,
+  });
 };
 
 export const orderControllerGetListOrders = () => {
@@ -1457,6 +1596,36 @@ export const contaminatedBatchControllerGetContaminatedBatchByBarCode = (barCode
   });
 };
 
+export const cellCultureRoomControllerGetCellCultureRooms = () => {
+  return customInstance<CellCultureRoomDto[]>({ url: `/api/cellcultureroom`, method: 'GET' });
+};
+
+export const cellCultureRoomControllerCreateCellCultureRoom = (createCellCultureRoomDto: CreateCellCultureRoomDto) => {
+  return customInstance<CellCultureRoomDto>({
+    url: `/api/cellcultureroom`,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    data: createCellCultureRoomDto,
+  });
+};
+
+export const cellCultureRoomControllerUpdateCellCultureRoom = (updateCellCultureRoomDto: UpdateCellCultureRoomDto) => {
+  return customInstance<CellCultureRoomDto>({
+    url: `/api/cellcultureroom`,
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    data: updateCellCultureRoomDto,
+  });
+};
+
+export const cellCultureRoomControllerGetCellCultureRoomById = (id: string) => {
+  return customInstance<CellCultureRoomDto>({ url: `/api/cellcultureroom/${id}`, method: 'GET' });
+};
+
+export const cellCultureRoomControllerGetCellCultureRoomByBarCode = (barCode: string) => {
+  return customInstance<CellCultureRoomDto>({ url: `/api/cellcultureroom/detailByBarCode/${barCode}`, method: 'GET' });
+};
+
 export const authControllerCreateUser = (createUserDto: CreateUserDto) => {
   return customInstance<User>({
     url: `/api/auth/createUser`,
@@ -1574,6 +1743,7 @@ export type FileUploadControllerGetFileUrlResult = NonNullable<
   Awaited<ReturnType<typeof fileUploadControllerGetFileUrl>>
 >;
 export type UsersControllerFindAllResult = NonNullable<Awaited<ReturnType<typeof usersControllerFindAll>>>;
+export type UsersControllerGetProfileResult = NonNullable<Awaited<ReturnType<typeof usersControllerGetProfile>>>;
 export type UsersControllerFindOneByEmailResult = NonNullable<
   Awaited<ReturnType<typeof usersControllerFindOneByEmail>>
 >;
@@ -1701,6 +1871,9 @@ export type InitiateCultureControllerGetInitiateCultureByIdResult = NonNullable<
 export type InitiateCultureControllerGetInitiateCultureByBarCodeResult = NonNullable<
   Awaited<ReturnType<typeof initiateCultureControllerGetInitiateCultureByBarCode>>
 >;
+export type InitiateCultureControllerGetInitiateCulturesByEmployeeIdResult = NonNullable<
+  Awaited<ReturnType<typeof initiateCultureControllerGetInitiateCulturesByEmployeeId>>
+>;
 export type PlantInfectionControllerGetPlantInfectionsResult = NonNullable<
   Awaited<ReturnType<typeof plantInfectionControllerGetPlantInfections>>
 >;
@@ -1724,6 +1897,9 @@ export type SubculturingControllerGetSubculturingByIdResult = NonNullable<
 >;
 export type SubculturingControllerGetSubculturingByBarCodeResult = NonNullable<
   Awaited<ReturnType<typeof subculturingControllerGetSubculturingByBarCode>>
+>;
+export type SubculturingControllerGetListSubculturingItemDetailsResult = NonNullable<
+  Awaited<ReturnType<typeof subculturingControllerGetListSubculturingItemDetails>>
 >;
 export type OrderControllerGetListOrdersResult = NonNullable<Awaited<ReturnType<typeof orderControllerGetListOrders>>>;
 export type OrderControllerCreateOrderResult = NonNullable<Awaited<ReturnType<typeof orderControllerCreateOrder>>>;
@@ -1802,6 +1978,21 @@ export type ContaminatedBatchControllerGetContaminatedBatchByIdResult = NonNulla
 >;
 export type ContaminatedBatchControllerGetContaminatedBatchByBarCodeResult = NonNullable<
   Awaited<ReturnType<typeof contaminatedBatchControllerGetContaminatedBatchByBarCode>>
+>;
+export type CellCultureRoomControllerGetCellCultureRoomsResult = NonNullable<
+  Awaited<ReturnType<typeof cellCultureRoomControllerGetCellCultureRooms>>
+>;
+export type CellCultureRoomControllerCreateCellCultureRoomResult = NonNullable<
+  Awaited<ReturnType<typeof cellCultureRoomControllerCreateCellCultureRoom>>
+>;
+export type CellCultureRoomControllerUpdateCellCultureRoomResult = NonNullable<
+  Awaited<ReturnType<typeof cellCultureRoomControllerUpdateCellCultureRoom>>
+>;
+export type CellCultureRoomControllerGetCellCultureRoomByIdResult = NonNullable<
+  Awaited<ReturnType<typeof cellCultureRoomControllerGetCellCultureRoomById>>
+>;
+export type CellCultureRoomControllerGetCellCultureRoomByBarCodeResult = NonNullable<
+  Awaited<ReturnType<typeof cellCultureRoomControllerGetCellCultureRoomByBarCode>>
 >;
 export type AuthControllerCreateUserResult = NonNullable<Awaited<ReturnType<typeof authControllerCreateUser>>>;
 export type AuthControllerLoginResult = NonNullable<Awaited<ReturnType<typeof authControllerLogin>>>;

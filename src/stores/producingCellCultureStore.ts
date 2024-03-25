@@ -1,4 +1,4 @@
-import { BioEmployeeDto, ContaminatedBatchDto, CreateContaminatedBatchDto, CreateCulturingCellDto, CreateInitiateCultureDto, CreateSubCulturingDto, CulturingCellDto, EnvironmentDto, InitiateCultureDto, SubculturingDto, UpdateCulturingCellDto, UpdateInitiateCultureDto, UpdateSubCulturingDto, bioEmployeeControllerGetEmployees, contaminatedBatchControllerCreateContaminatedBatch, contaminatedBatchControllerGetContaminatedBatchByBarCode, contaminatedBatchControllerGetContaminatedBatchById, contaminatedBatchControllerGetContaminatedBatchs, culturingCellControllerCreateCulturingCell, culturingCellControllerGetCulturingCells, culturingCellControllerUpdateCulturingCell, environmentControllerGetEnvironments, initiateCultureControllerCreateInitiateCulture, initiateCultureControllerGetInitiateCultureById, initiateCultureControllerGetListInitiateCultures, initiateCultureControllerUpdateInitiateCulture, subculturingControllerCreateSubculturing, subculturingControllerGetListSubculturings, subculturingControllerGetSubculturingByBarCode, subculturingControllerGetSubculturingById, subculturingControllerUpdateSubculturing } from '@/api/auth-proxies';
+import { BioEmployeeDto, ContaminatedBatchDto, CreateContaminatedBatchDto, CreateCulturingCellDto, CreateInitiateCultureDto, CreateSubCulturingDto, CulturingCellDto, EnvironmentDto, InitiateCultureControllerGetInitiateCulturesByEmployeeIdParams, InitiateCultureDto, SubculturingDto, UpdateCulturingCellDto, UpdateInitiateCultureDto, UpdateSubCulturingDto, bioEmployeeControllerGetEmployees, contaminatedBatchControllerCreateContaminatedBatch, contaminatedBatchControllerGetContaminatedBatchByBarCode, contaminatedBatchControllerGetContaminatedBatchById, contaminatedBatchControllerGetContaminatedBatchs, culturingCellControllerCreateCulturingCell, culturingCellControllerGetCulturingCells, culturingCellControllerUpdateCulturingCell, environmentControllerGetEnvironments, initiateCultureControllerCreateInitiateCulture, initiateCultureControllerGetInitiateCultureById, initiateCultureControllerGetInitiateCulturesByEmployeeId, initiateCultureControllerGetListInitiateCultures, initiateCultureControllerUpdateInitiateCulture, subculturingControllerCreateSubculturing, subculturingControllerGetListSubculturings, subculturingControllerGetSubculturingByBarCode, subculturingControllerGetSubculturingById, subculturingControllerUpdateSubculturing } from '@/api/auth-proxies';
 import create from 'zustand'
 
 
@@ -50,6 +50,13 @@ export interface IInitiateCultureForm {
     plantCloning: string;
     status: string;
     tissueCultureLineCode: string;
+}
+
+export type InitiateCultureEmpItem = Omit<InitiateCultureDto, "employees" | "createdAt" | "updatedAt">;
+
+export interface InitiateCultureEmpData {
+    initiateCulturesEmp: InitiateCultureEmpItem[];
+    total: number;
 }
 
 export interface ICulturingCellForm {
@@ -110,6 +117,7 @@ type ProducingCellCultureState = {
     initiateCultureData: {
         initiateCultures: InitiateCultureDto[],
         initiateCulture: InitiateCultureDto | null;
+        initiateCulturesEmpData: InitiateCultureEmpData;
     },
     culturingCellData: {
         culturingCells: CulturingCellDto[];
@@ -148,6 +156,7 @@ type ProducingCellCultureState = {
     createContaminatedBatch: (payload: CreateContaminatedBatchDto) => Promise<void>;
     getDetailContaminateBatchById: (id: string) => Promise<void>;
     getDetailContaminateBatchByBarCode: (barCode: string) => Promise<void>;
+    getInitiateCulturesByEmployeeId: (id: string, params?: InitiateCultureControllerGetInitiateCulturesByEmployeeIdParams) => Promise<void>;
 }
 
 export const producingCellCultureStore = create<ProducingCellCultureState>((set) => ({
@@ -161,6 +170,10 @@ export const producingCellCultureStore = create<ProducingCellCultureState>((set)
     initiateCultureData: {
         initiateCultures : [],
         initiateCulture: null,
+        initiateCulturesEmpData: {
+            initiateCulturesEmp: [],
+            total: 0,
+        }
     },
     culturingCellData: {
         culturingCells: [],
@@ -347,9 +360,19 @@ export const producingCellCultureStore = create<ProducingCellCultureState>((set)
     getDetailContaminateBatchByBarCode: async (barCode: string) => {
         try {
             set({ isLoading: true, error: null });
-            const { data } = await contaminatedBatchControllerGetContaminatedBatchByBarCode(id);
+            const { data } = await contaminatedBatchControllerGetContaminatedBatchByBarCode(barCode);
             set({ isLoading: false });
             set((state) => ({...state, isLoading: false, contaminatedBatchData: { ...state.contaminatedBatchData,  contaminatedBatch: data }}))
+        } catch (error: any) {
+            set({ error: error.message, isLoading: false });
+        }
+    },
+    getInitiateCulturesByEmployeeId: async(id: string, params?: InitiateCultureControllerGetInitiateCulturesByEmployeeIdParams) => {
+        try {
+            set({ isLoading: true, error: null });
+            const { data } = await initiateCultureControllerGetInitiateCulturesByEmployeeId(id, params);
+            set({ isLoading: false });
+            set((state) => ({...state, isLoading: false, initiateCultureData: { ...state.initiateCultureData,  initiateCulturesEmpData: {...state.initiateCultureData.initiateCulturesEmpData, initiateCulturesEmp: data['initiateCultures'], total: data['total']} }}))
         } catch (error: any) {
             set({ error: error.message, isLoading: false });
         }

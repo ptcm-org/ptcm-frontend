@@ -5,6 +5,11 @@ export const WEEKSOFYEAR: DefaultOptionType[] = Array.from({ length: 52 }, (_, i
     value: index + 1,
   }));
 
+  export const MINSOFHOUR: DefaultOptionType[] = Array.from({ length: 60 }, (_, index) => ({
+    label: `${index + 1}`,
+    value: index + 1,
+  }));
+
 export const ORDER_STATUS_OPTIONS: DefaultOptionType[] = [
     {
         label: 'Pending',

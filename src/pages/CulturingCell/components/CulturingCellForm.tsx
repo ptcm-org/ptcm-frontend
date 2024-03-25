@@ -2,8 +2,10 @@ import { DATE_FORMAT } from "@/pages/Orders/constant";
 import { useLovHook } from "@/pages/Settings/Lov/Hook";
 import { lovStore } from "@/stores/lovStore";
 import { ICulturingCellForm, producingCellCultureStore } from "@/stores/producingCellCultureStore";
+import { lookupTableStore } from '@/stores/lookupTableStore';
 import { IInitiateCultureForm } from "@/stores/producingCellCultureStore";
-import { WEEKSOFYEAR } from "@/utils/commonConstantData";
+import { userStore } from "@/stores/userStore";
+import { MINSOFHOUR, WEEKSOFYEAR } from "@/utils/commonConstantData";
 import { Avatar, Button, Col, DatePicker, Divider, Form, Input, InputNumber, List, Row, Select, Tabs, Transfer, TransferProps, Typography } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { DefaultOptionType } from "antd/es/select";
@@ -21,7 +23,13 @@ const CulturingCellForm: React.FC<{
     const [form] = Form.useForm<ICulturingCellForm>();
     const navigate = useNavigate();
     const getLovs = lovStore(state => state.getLovs);
+    const lovData = lovStore(state => state.lovData);
+    const initiateCulture = producingCellCultureStore(state => state.initiateCultureData.initiateCulture);
+    const environments = producingCellCultureStore(state => state.environmentData.environments);
 
+    const currentUser = userStore(state => state.currentUser);
+    const boxList = lookupTableStore(state => state.boxList);
+    const dishList = lookupTableStore(state => state.dishList);
     const { getOptions } = useLovHook([
         'batch',
         'batchCode',
@@ -37,9 +45,22 @@ const CulturingCellForm: React.FC<{
         console.log(key);
       };
 
-    //   useEffect(() => {
-    //     getListEmployees();
-    //  },[]);
+    useEffect(() => {
+        getLovs();
+    },[]);
+
+    useEffect(() => {
+        console.log('initiateCulture is:', initiateCulture);
+        if (initiateCulture) {
+            const { initiatecultureDate } = initiateCulture;
+            initCultureForm.setFieldsValue({
+            ...initiateCulture,
+            initiatecultureDate: initiatecultureDate ? dayjs(initiatecultureDate) : null,
+          });
+        }
+    },[initiateCulture]);
+
+
 
       return (
         <Tabs 
@@ -167,11 +188,11 @@ const CulturingCellForm: React.FC<{
                                 <Form.Item
                                 label='Phase'
                                 name="phaseIndex"
-                                rules={[{ required: true }]}
+                                rules={[{ required: false }]}
                                 >
                                 <Select
                                     showSearch
-                                    options={getOptions.cellCulture} 
+                                    options={getOptions.phases} 
                                     placeholder='--Select One--'
                                 />
                                 </Form.Item>
@@ -180,7 +201,7 @@ const CulturingCellForm: React.FC<{
                                 <Form.Item
                                 label='Infection Level'
                                 name="infectionLevel"
-                                rules={[{ required: true }]}
+                                rules={[{ required: false }]}
                                 >
                                 <Select
                                     showSearch
@@ -197,7 +218,7 @@ const CulturingCellForm: React.FC<{
                     key: 'Implantedtissue',
                     label: 'Implanted tissue',
                     children: (
-                    <Form form={form} layout="vertical" className="my-4">
+                    <Form form={form} layout="vertical" className="my-4" onFinish={onFinish}>
                         <Row gutter={24}>
                             <Col span={24} md={12} xl={6}>
                                 <Form.Item
@@ -207,7 +228,12 @@ const CulturingCellForm: React.FC<{
                                 >
                                 <Select
                                     showSearch
-                                    options={getOptions.cellCulture} 
+                                    options={boxList.map(
+                                        (item): DefaultOptionType => ({
+                                          label: item.boxName,
+                                          value: item.id,
+                                        }),
+                                    )}
                                     placeholder='--Select One--'
                                 />
                                 </Form.Item>
@@ -220,7 +246,12 @@ const CulturingCellForm: React.FC<{
                                 >
                                 <Select
                                     showSearch
-                                    options={getOptions.cellCulture} 
+                                    options={dishList.map(
+                                        (item): DefaultOptionType => ({
+                                          label: item.dishName,
+                                          value: item.id,
+                                        }),
+                                      )}
                                     placeholder='--Select One--'
                                 />
                                 </Form.Item>
@@ -233,7 +264,12 @@ const CulturingCellForm: React.FC<{
                                 >
                                 <Select
                                     showSearch
-                                    options={getOptions.cellCulture} 
+                                    options={environments?.map(
+                                        (item): DefaultOptionType => ({
+                                          label: item.environmentName,
+                                          value: item.id,
+                                        }),
+                                      )} 
                                     placeholder='--Select One--'
                                 />
                                 </Form.Item>
@@ -271,7 +307,7 @@ const CulturingCellForm: React.FC<{
                                 >
                                 <Select
                                     showSearch
-                                    options={WEEKSOFYEAR}
+                                    options={MINSOFHOUR}
                                 />
                                 </Form.Item>
                             </Col>

@@ -22,7 +22,7 @@ export const ROUTES = {
   CREATEINITIATECULTURE: '/initiateculture/create',
   UPDATEINITIATECULTURE: '/initiateculture/:id/update',
   CULTURINGCELL: '/culturingcells',
-  CREATECULTURINGCELL: '/culturingcell/create',
+  CREATECULTURINGCELL: '/culturingcell/:id/create',
   UPDATECULTURINGCELL: '/culturingcells/:id/update',
   CELLCULTURES: '/cellculturerooms',
   CREATECELLCULTURE: '/cellcultureroom/create',
