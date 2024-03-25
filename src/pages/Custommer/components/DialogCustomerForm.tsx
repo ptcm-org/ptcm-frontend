@@ -15,256 +15,10 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '
 import { customerControllerCreateCustomer, customerControllerUpdateCustomer } from '@/api/auth-proxies';
 import { cn } from '@/lib/utils';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Check, ChevronsUpDown } from 'lucide-react';
+import { CheckIcon } from 'lucide-react';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from '@/components/ui/command';
-import { useState } from 'react';
-
-type CountryCode =
-  | 'AC'
-  | 'AD'
-  | 'AE'
-  | 'AF'
-  | 'AG'
-  | 'AI'
-  | 'AL'
-  | 'AM'
-  | 'AO'
-  | 'AR'
-  | 'AS'
-  | 'AT'
-  | 'AU'
-  | 'AW'
-  | 'AX'
-  | 'AZ'
-  | 'BA'
-  | 'BB'
-  | 'BD'
-  | 'BE'
-  | 'BF'
-  | 'BG'
-  | 'BH'
-  | 'BI'
-  | 'BJ'
-  | 'BL'
-  | 'BM'
-  | 'BN'
-  | 'BO'
-  | 'BQ'
-  | 'BR'
-  | 'BS'
-  | 'BT'
-  | 'BW'
-  | 'BY'
-  | 'BZ'
-  | 'CA'
-  | 'CC'
-  | 'CD'
-  | 'CF'
-  | 'CG'
-  | 'CH'
-  | 'CI'
-  | 'CK'
-  | 'CL'
-  | 'CM'
-  | 'CN'
-  | 'CO'
-  | 'CR'
-  | 'CU'
-  | 'CV'
-  | 'CW'
-  | 'CX'
-  | 'CY'
-  | 'CZ'
-  | 'DE'
-  | 'DJ'
-  | 'DK'
-  | 'DM'
-  | 'DO'
-  | 'DZ'
-  | 'EC'
-  | 'EE'
-  | 'EG'
-  | 'EH'
-  | 'ER'
-  | 'ES'
-  | 'ET'
-  | 'FI'
-  | 'FJ'
-  | 'FK'
-  | 'FM'
-  | 'FO'
-  | 'FR'
-  | 'GA'
-  | 'GB'
-  | 'GD'
-  | 'GE'
-  | 'GF'
-  | 'GG'
-  | 'GH'
-  | 'GI'
-  | 'GL'
-  | 'GM'
-  | 'GN'
-  | 'GP'
-  | 'GQ'
-  | 'GR'
-  | 'GT'
-  | 'GU'
-  | 'GW'
-  | 'GY'
-  | 'HK'
-  | 'HN'
-  | 'HR'
-  | 'HT'
-  | 'HU'
-  | 'ID'
-  | 'IE'
-  | 'IL'
-  | 'IM'
-  | 'IN'
-  | 'IO'
-  | 'IQ'
-  | 'IR'
-  | 'IS'
-  | 'IT'
-  | 'JE'
-  | 'JM'
-  | 'JO'
-  | 'JP'
-  | 'KE'
-  | 'KG'
-  | 'KH'
-  | 'KI'
-  | 'KM'
-  | 'KN'
-  | 'KP'
-  | 'KR'
-  | 'KW'
-  | 'KY'
-  | 'KZ'
-  | 'LA'
-  | 'LB'
-  | 'LC'
-  | 'LI'
-  | 'LK'
-  | 'LR'
-  | 'LS'
-  | 'LT'
-  | 'LU'
-  | 'LV'
-  | 'LY'
-  | 'MA'
-  | 'MC'
-  | 'MD'
-  | 'ME'
-  | 'MF'
-  | 'MG'
-  | 'MH'
-  | 'MK'
-  | 'ML'
-  | 'MM'
-  | 'MN'
-  | 'MO'
-  | 'MP'
-  | 'MQ'
-  | 'MR'
-  | 'MS'
-  | 'MT'
-  | 'MU'
-  | 'MV'
-  | 'MW'
-  | 'MX'
-  | 'MY'
-  | 'MZ'
-  | 'NA'
-  | 'NC'
-  | 'NE'
-  | 'NF'
-  | 'NG'
-  | 'NI'
-  | 'NL'
-  | 'NO'
-  | 'NP'
-  | 'NR'
-  | 'NU'
-  | 'NZ'
-  | 'OM'
-  | 'PA'
-  | 'PE'
-  | 'PF'
-  | 'PG'
-  | 'PH'
-  | 'PK'
-  | 'PL'
-  | 'PM'
-  | 'PR'
-  | 'PS'
-  | 'PT'
-  | 'PW'
-  | 'PY'
-  | 'QA'
-  | 'RE'
-  | 'RO'
-  | 'RS'
-  | 'RU'
-  | 'RW'
-  | 'SA'
-  | 'SB'
-  | 'SC'
-  | 'SD'
-  | 'SE'
-  | 'SG'
-  | 'SH'
-  | 'SI'
-  | 'SJ'
-  | 'SK'
-  | 'SL'
-  | 'SM'
-  | 'SN'
-  | 'SO'
-  | 'SR'
-  | 'SS'
-  | 'ST'
-  | 'SV'
-  | 'SX'
-  | 'SY'
-  | 'SZ'
-  | 'TA'
-  | 'TC'
-  | 'TD'
-  | 'TG'
-  | 'TH'
-  | 'TJ'
-  | 'TK'
-  | 'TL'
-  | 'TM'
-  | 'TN'
-  | 'TO'
-  | 'TR'
-  | 'TT'
-  | 'TV'
-  | 'TW'
-  | 'TZ'
-  | 'UA'
-  | 'UG'
-  | 'US'
-  | 'UY'
-  | 'UZ'
-  | 'VA'
-  | 'VC'
-  | 'VE'
-  | 'VG'
-  | 'VI'
-  | 'VN'
-  | 'VU'
-  | 'WF'
-  | 'WS'
-  | 'XK'
-  | 'YE'
-  | 'YT'
-  | 'ZA'
-  | 'ZM'
-  | 'ZW';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { CaretSortIcon } from '@radix-ui/react-icons';
 
 const CustomerSchema = z.object({
   customerName: z.string().min(2).max(100).optional(),
@@ -276,7 +30,7 @@ const CustomerSchema = z.object({
   postalCode: z.string().max(20).optional(),
   emailAddress: z.string().email().optional(),
   emailAddressCustomer: z.string().email().optional(),
-  phoneNumberCustomer: z.string().optional(),
+  phone: z.string().optional(),
   businessType: z.string().min(2).max(50).optional(),
   status: z.enum(['active', 'inactive', 'pending']).optional(),
   website: z.string().url().optional().optional(),
@@ -284,15 +38,32 @@ const CustomerSchema = z.object({
   lastName: z.string().min(2).max(100).optional(),
   middleName: z.string().min(2).max(100).optional(),
   skype: z.string().min(2).max(100).optional(),
+  fax: z.string().min(2).max(100).optional(),
+  areaCode: z.string().min(2).max(100).optional(),
 });
 type CustomerFormValues = FormValues<typeof CustomerSchema>;
 
 const DialogCustomerForm = ({ open, setOpen, row }: DialogFormProps) => {
-  const [open1, setOpen1] = useState(false);
-  const [value, setValue] = useState<CountryCode>();
   const { toast } = useToast();
   const { mutate } = useSWRConfig();
-  const defaultValues: Partial<CustomerFormValues> = row ? row.original : {};
+  let defaultValues: Partial<CustomerFormValues>;
+
+  if (row) {
+    const { contactInfo, phoneNumber } = row.original;
+
+    defaultValues = {
+      ...row.original,
+      areaCode: phoneNumber?.areaCode,
+      phone: phoneNumber?.phone,
+      firstName: contactInfo?.firstName,
+      lastName: contactInfo?.lastName,
+      middleName: contactInfo?.middleName,
+      skype: contactInfo?.skype,
+      emailAddressCustomer: contactInfo?.emailAddress,
+    };
+  } else {
+    defaultValues = {};
+  }
   const form = useForm<CustomerFormValues>({
     resolver: zodResolver(CustomerSchema),
     defaultValues,
@@ -320,7 +91,7 @@ const DialogCustomerForm = ({ open, setOpen, row }: DialogFormProps) => {
       postalCode,
       emailAddress,
       emailAddressCustomer,
-      phoneNumberCustomer,
+      phone,
       businessType,
       website,
       firstName,
@@ -328,9 +99,11 @@ const DialogCustomerForm = ({ open, setOpen, row }: DialogFormProps) => {
       middleName,
       skype,
       status,
+      areaCode,
     } = data;
     const formattedPhoneNumber = {
-      [getCountryCallingCode(value.toUpperCase())]: phoneNumberCustomer,
+      phone: phone,
+      areaCode: getCountryCallingCode(areaCode.toUpperCase()),
     };
     const contactInfo = {
       firstName,
@@ -355,6 +128,7 @@ const DialogCustomerForm = ({ open, setOpen, row }: DialogFormProps) => {
       website,
       contactInfo,
     };
+    console.log(payload);
     const request = row
       ? customerControllerUpdateCustomer({ id: row.original.id, customer: payload })
       : customerControllerCreateCustomer(payload);
@@ -364,7 +138,7 @@ const DialogCustomerForm = ({ open, setOpen, row }: DialogFormProps) => {
       toast({
         title: 'Tạo khách hàng thành công',
       });
-      await mutate('/api/customer');
+      await mutate('api/customer');
       setOpen(false);
       form.reset(defaultValues);
     }
@@ -378,7 +152,7 @@ const DialogCustomerForm = ({ open, setOpen, row }: DialogFormProps) => {
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-4">
               <div className="space-y-2">
                 <FormField
                   control={form.control}
@@ -418,6 +192,21 @@ const DialogCustomerForm = ({ open, setOpen, row }: DialogFormProps) => {
                       <FormLabel>Địa chỉ khách hàng 2</FormLabel>
                       <FormControl>
                         <Input placeholder="Địa chỉ khách hàng 2" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="space-y-2">
+                <FormField
+                  control={form.control}
+                  name="fax"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Địa chỉ Fax</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Địa chỉ fax" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -641,64 +430,76 @@ const DialogCustomerForm = ({ open, setOpen, row }: DialogFormProps) => {
                   )}
                 />
               </div>
-            </div>
-            <div className="grid grid-cols-2 pt-6">
-              <>
-                <div className="flex gap-2">
-                  <Popover open={open1} onOpenChange={setOpen1}>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        role="combobox"
-                        aria-expanded={open}
-                        className="w-[200px] justify-between"
-                      >
-                        {value ? getCountries().find((framework) => framework === value) : 'Select framework...'}
-                        {getCountries().find((framework) => framework === value?.toUpperCase())}
-                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-[200px] p-0">
-                      <Command>
-                        <CommandInput placeholder="Search framework..." />
-                        <CommandEmpty>No framework found.</CommandEmpty>
-                        <CommandGroup>
-                          {getCountries().map((framework) => (
-                            <CommandItem
-                              key={framework}
-                              value={framework}
-                              onSelect={(currentValue) => {
-                                setValue(currentValue === value ? '' : currentValue);
-                                setOpen1(false);
-                              }}
+              <div className=" space-y-2">
+                <FormField
+                  control={form.control}
+                  name="areaCode"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col gap-3">
+                      <FormLabel>Mã vùng</FormLabel>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              variant="outline"
+                              role="combobox"
+                              className={cn('w-[200px] justify-between', !field.value && 'text-muted-foreground')}
                             >
-                              <Check
-                                className={cn(
-                                  'mr-2 h-4 w-4',
-                                  value?.toUpperCase() === framework ? 'opacity-100' : 'opacity-0',
-                                )}
-                              />
-                              {framework}
-                            </CommandItem>
-                          ))}
-                        </CommandGroup>
-                      </Command>
-                    </PopoverContent>
-                  </Popover>
-                  <FormField
-                    control={form.control}
-                    name="phoneNumberCustomer"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <Input placeholder="sđt" {...field} type="number" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              </>
+                              {field.value
+                                ? getCountries().find((country) => country === field.value)
+                                : 'Select country'}
+                              <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-[200px] p-0">
+                          <Command>
+                            <CommandInput placeholder="Search framework..." className="h-9" />
+                            <CommandEmpty>No framework found.</CommandEmpty>
+                            <ScrollArea className="h-[200px]">
+                              <CommandGroup>
+                                {getCountries().map((country) => (
+                                  <CommandItem
+                                    value={country}
+                                    key={country}
+                                    onSelect={() => {
+                                      form.setValue('country', country);
+                                    }}
+                                  >
+                                    {country}
+                                    <CheckIcon
+                                      className={cn(
+                                        'ml-auto h-4 w-4',
+                                        country === field.value ? 'opacity-100' : 'opacity-0',
+                                      )}
+                                    />
+                                  </CommandItem>
+                                ))}
+                              </CommandGroup>
+                            </ScrollArea>
+                          </Command>
+                        </PopoverContent>
+                      </Popover>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="space-y-2">
+                <FormField
+                  control={form.control}
+                  name="phone"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Số điện thoại người liên hệ</FormLabel>
+                      <FormControl>
+                        <Input placeholder="sđt" {...field} type="number" />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
             </div>
             <DialogFooter className="pt-2">
               <Button type="submit">Save</Button>
