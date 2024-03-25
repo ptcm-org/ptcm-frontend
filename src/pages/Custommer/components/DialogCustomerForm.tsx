@@ -654,7 +654,7 @@ const DialogCustomerForm = ({ open, setOpen, row }: DialogFormProps) => {
                         className="w-[200px] justify-between"
                       >
                         {value ? getCountries().find((framework) => framework === value) : 'Select framework...'}
-                        {getCountries().find((framework) => framework === value.toUpperCase())}
+                        {getCountries().find((framework) => framework === value?.toUpperCase())}
                         <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                       </Button>
                     </PopoverTrigger>
@@ -675,7 +675,7 @@ const DialogCustomerForm = ({ open, setOpen, row }: DialogFormProps) => {
                               <Check
                                 className={cn(
                                   'mr-2 h-4 w-4',
-                                  value.toUpperCase() === framework ? 'opacity-100' : 'opacity-0',
+                                  value?.toUpperCase() === framework ? 'opacity-100' : 'opacity-0',
                                 )}
                               />
                               {framework}
