@@ -30,24 +30,8 @@ export const LOV_CONFIG_LIST = [
       title: 'Cell Culture Group',
     },
     {
-        key: 'cleanRooms',
-        title: 'Clean Rooms',
-    },
-    {
-        key: 'shelves',
-        title: 'Shelves',
-    },
-    {
       key: 'jobTitle',
       title: 'Job Title',
-    },
-    {
-      key: 'employmentType',
-      title: 'Employment Type',
-    },
-    {
-      key: 'employmentStatus',
-      title: 'Employment Status',
     },
     {
       key: 'contractType',
@@ -56,6 +40,18 @@ export const LOV_CONFIG_LIST = [
     {
       key: 'plantCode',
       title: 'Plant Code',
+    },
+    {
+      key: 'infectionLevel',
+      title: 'Infection Level',
+    },
+    {
+      key: 'transaction',
+      title: 'Transaction',
+    },
+    {
+      key: 'cellCultureRoomStatus',
+      title: 'Cell Culture Room Status',
     },
   ] as const;
   

@@ -38,7 +38,8 @@ const CulturingCellForm: React.FC<{
         'tissueLineCode',
         'cellCulture',
         'phases',
-        'plantCode'
+        'plantCode',
+        'infectionLevel'
       ]);
 
       const onChange = (key: string) => {
@@ -205,7 +206,7 @@ const CulturingCellForm: React.FC<{
                                 >
                                 <Select
                                     showSearch
-                                    options={getOptions.cellCulture} 
+                                    options={getOptions.infectionLevel} 
                                     placeholder='--Select One--'
                                 />
                                 </Form.Item>

@@ -1,8 +1,10 @@
 import { DATE_FORMAT } from "@/pages/Orders/constant";
 import { useLovHook } from "@/pages/Settings/Lov/Hook";
+import { lookupTableStore } from "@/stores/lookupTableStore";
 import { lovStore } from "@/stores/lovStore";
 import { producingCellCultureStore } from "@/stores/producingCellCultureStore";
 import { IInitiateCultureForm } from "@/stores/producingCellCultureStore";
+import { userStore } from "@/stores/userStore";
 import { WEEKSOFYEAR } from "@/utils/commonConstantData";
 import { Avatar, Button, Col, DatePicker, Divider, Form, Input, InputNumber, List, Row, Select, Transfer, TransferProps, Typography } from "antd";
 import TextArea from "antd/es/input/TextArea";
@@ -20,28 +22,32 @@ const CellCultureRoomForm: React.FC<{
     const [form] = Form.useForm<IInitiateCultureForm>();
     const navigate = useNavigate();
     const getLovs = lovStore(state => state.getLovs);
-    const getListEmployees = producingCellCultureStore(state => state.getListEmployees);
-    const employees = producingCellCultureStore(state => state.employeeData.employees);
+    const getListCleanRooms = lookupTableStore(state => state.getListCleanRooms);
+    const getListShelves = lookupTableStore(state => state.getListShelves);
+    const getListEnvironments = producingCellCultureStore(state => state.getListEnvironments);
+    const environmentData = producingCellCultureStore(state => state.environmentData);
+    const cleanRooms = lookupTableStore(state => state.cleanRooms);
+    const shelves = lookupTableStore(state => state.shelves);
+    const getProfile = userStore(state => state.getProfile);
+    const currentUser = userStore(state => state.currentUser);
 
     const { getOptions } = useLovHook([
         'batch',
         'batchCode',
-        'block',
-        'coustomer',
         'tissueLineCode',
         'cellCulture',
         'phases',
-        'plantCode'
+        'plantCode',
+        'infectionLevel',
+        'transaction',
+        'cellCultureRoomStatus'
       ]);
 
-      const [targetKeys, setTargetKeys] = useState([]);
-      const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
-      const handleChange = (newSelectedKeys: string[]) => {
-        setSelectedKeys(newSelectedKeys);
-      };
-
       useEffect(() => {
-        getListEmployees();
+        getLovs();
+        getListEnvironments();
+        getListCleanRooms();
+        getListShelves();
      },[]);
 
       return (
@@ -103,7 +109,7 @@ const CellCultureRoomForm: React.FC<{
                     >
                     <Select
                         showSearch
-                        options={getOptions.batchCode} 
+                        options={getOptions.transaction} 
                         placeholder='--Select One--'
                       />
                     </Form.Item>
@@ -151,7 +157,13 @@ const CellCultureRoomForm: React.FC<{
                     >
                     <Select
                         showSearch
-                        options={WEEKSOFYEAR}
+                        options={environmentData.environments?.map(
+                            (item): DefaultOptionType => ({
+                              label: item.environmentName,
+                              value: item.id,
+                            }),
+                          )}
+                        placeholder='--Select One--'  
                       />
                     </Form.Item>
                 </Col>                
@@ -185,7 +197,7 @@ const CellCultureRoomForm: React.FC<{
                     >
                     <Select
                         showSearch
-                        options={getOptions.cellCulture} 
+                        options={getOptions.phases} 
                         placeholder='--Select One--'
                     />
                     </Form.Item>
@@ -198,7 +210,7 @@ const CellCultureRoomForm: React.FC<{
                     >
                     <Select
                         showSearch
-                        options={getOptions.cellCulture} 
+                        options={getOptions.infectionLevel} 
                         placeholder='--Select One--'
                     />
                     </Form.Item>
@@ -221,7 +233,12 @@ const CellCultureRoomForm: React.FC<{
                     >
                     <Select
                         showSearch
-                        options={getOptions.cellCulture} 
+                        options={cleanRooms?.map(
+                            (item): DefaultOptionType => ({
+                              label: item.roomName,
+                              value: item.id,
+                            }),
+                          )}  
                         placeholder='--Select One--'
                       />
                     </Form.Item>
@@ -234,7 +251,12 @@ const CellCultureRoomForm: React.FC<{
                     >
                     <Select
                         showSearch
-                        options={getOptions.cellCulture} 
+                        options={shelves?.map(
+                            (item): DefaultOptionType => ({
+                              label: item.shelveName,
+                              value: item.id,
+                            }),
+                          )}   
                         placeholder='--Select One--'
                       />
                     </Form.Item>
@@ -247,7 +269,7 @@ const CellCultureRoomForm: React.FC<{
                     >
                     <Select
                         showSearch
-                        options={getOptions.cellCulture} 
+                        options={getOptions.cellCultureRoomStatus} 
                         placeholder='--Select One--'
                       />
                     </Form.Item>
@@ -256,13 +278,9 @@ const CellCultureRoomForm: React.FC<{
                     <Form.Item
                     label='Employee'
                     name="employeeIds"
-                    rules={[{ required: true }]}
+                    rules={[{ required: false }]}
                     >
-                    <Select
-                        showSearch
-                        options={getOptions.cellCulture} 
-                        placeholder='--Select One--'
-                      />
+                    <Input value={currentUser?.employeeData?.departmentId}/>
                     </Form.Item>
                 </Col>
                 <Col span={24} md={12} xl={12}>
@@ -281,7 +299,7 @@ const CellCultureRoomForm: React.FC<{
                     (*) Required
                 </p>
                 <div className="space-x-4">
-                <Button onClick={() => navigate('/subculturings')}>
+                <Button onClick={() => navigate('/cellculturerooms')}>
                     Back
                 </Button>
                 <Button type="primary" htmlType="submit">

@@ -39,7 +39,7 @@ const  CellCultureRoomPages = () => {
         <Card>
           <div className="flex items-start justify-between">
             <Typography.Title level={4}>
-              Culturing Cells
+              Cell Culturer Room
             </Typography.Title>
             <div className="flex space-x-2">
               <Button
@@ -50,7 +50,7 @@ const  CellCultureRoomPages = () => {
               </Button>
               <CreateWithTitleButton
                 title='Create Culturing Cell'
-                onClick={() => navigate('/culturingcell/create')}
+                onClick={() => navigate('/cellcultureroom/create')}
               />
             </div>
           </div>

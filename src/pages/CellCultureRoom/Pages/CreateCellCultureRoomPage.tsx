@@ -13,7 +13,7 @@ const CreateCellCultureRoomPage = () => {
   return (
     <Card>
       <Typography.Title level={4}>
-        Create Initiate Culture
+        Create CellCulture Room
       </Typography.Title>
       <Divider />
       <Spin spinning={isLoading}>
